@@ -149,8 +149,8 @@ app.post('/webhook', async (req, res) => {
     }
 
     // Sequence already running - ignore messages
-  } catch (err) {
-    console.error('Webhook error:', err);
+} catch (err) {
+    console.error('Webhook error:', err.message, err.stack);
   }
 });
 
