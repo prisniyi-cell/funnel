@@ -2,11 +2,14 @@ const express = require('express');
 const https = require('https');
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
 const PHONE_NUMBER_ID = process.env.PHONE_NUMBER_ID;
 const VERIFY_TOKEN = "dollarskill123";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "dollarskill999";
 const leads = {};
+const conversations = {};
 
 function sendRequest(path, data) {
   return new Promise((resolve, reject) => {
@@ -34,6 +37,8 @@ function sendRequest(path, data) {
 
 function sendText(to, message) {
   console.log('Sending text to:', to);
+  if (!conversations[to]) conversations[to] = [];
+  conversations[to].push({ from: 'bot', text: message, time: new Date().toISOString() });
   return sendRequest(`/v19.0/${PHONE_NUMBER_ID}/messages`, {
     messaging_product: 'whatsapp',
     to,
@@ -43,6 +48,8 @@ function sendText(to, message) {
 }
 
 function sendImage(to, url) {
+  if (!conversations[to]) conversations[to] = [];
+  conversations[to].push({ from: 'bot', text: '[Image]', time: new Date().toISOString() });
   return sendRequest(`/v19.0/${PHONE_NUMBER_ID}/messages`, {
     messaging_product: 'whatsapp',
     to,
@@ -52,6 +59,8 @@ function sendImage(to, url) {
 }
 
 function sendAudio(to, url) {
+  if (!conversations[to]) conversations[to] = [];
+  conversations[to].push({ from: 'bot', text: '[Voice Note]', time: new Date().toISOString() });
   return sendRequest(`/v19.0/${PHONE_NUMBER_ID}/messages`, {
     messaging_product: 'whatsapp',
     to,
@@ -61,6 +70,8 @@ function sendAudio(to, url) {
 }
 
 function sendVideo(to, url) {
+  if (!conversations[to]) conversations[to] = [];
+  conversations[to].push({ from: 'bot', text: '[Video]', time: new Date().toISOString() });
   return sendRequest(`/v19.0/${PHONE_NUMBER_ID}/messages`, {
     messaging_product: 'whatsapp',
     to,
@@ -84,29 +95,18 @@ async function runSequence(phone) {
 
   await delay(20000);
   await sendAudio(phone, VOICE_NOTE_URL);
-
   await delay(20000);
   await sendImage(phone, PHOTO1_URL);
-
   await delay(20000);
   await sendImage(phone, PHOTO2_URL);
-
   await delay(20000);
   await sendImage(phone, PHOTO3_URL);
-
   await delay(20000);
   await sendVideo(phone, VIDEO_URL);
-
   await delay(20000);
-  await sendText(phone, "A lot of people ask me what the 'update' actually looks like in practice. Daniel in our circle recorded a quick video showing exactly how it's set up 🙂‍↔️: https://youtu.be/fESbDk6ngWk. It's pretty straightforward. The first 5 minutes alone will show you why this is completely different");
-
-   await delay(20000);
-  await sendText(phone, "Take your time to digest it");
-
+  await sendText(phone, "A lot of people ask me what the 'update' actually looks like in practice. Daniel in our circle recorded a quick video showing exactly how it's set up 🙂‍↔️: https://youtu.be/fESbDk6ngWk. It's pretty straightforward. The first 5 minutes alone will show you why this is completely different.Take your time to digest it");
   await delay(1500000);
-
   await sendText(phone, "AND I know what you're thinking, 'this won't work for me', 'I've tried a lot, wasting my time again would suck'. That's exactly what I thought too. Until I actually started. Now I'm just coming back from a trip like I told you 🙂‍↔️\n\nFor N50,000, you get the kind of income that lets you travel, pay rent without thinking twice, take care of your family without stress. Results within days to weeks if you implement. An active community to ginger you to get your bag. And a 30-day money back guarantee. I will personally even apologise publicly for wasting your time if you implement everything 🙂‍↔️\n\nYou're the only one that can stop yourself.\n\nLike I said we don't want this to cast and 73 people already got inside. Price moves to N150,000 at 100.\nhttps://app.expertnaire.com/product/8646634117/8478632445");
-
   await delay(20000);
   await sendText(phone, "Any questions before you get your big bag?");
 
@@ -117,14 +117,74 @@ async function runSequence(phone) {
     await sendText(phone, "Someone just asked me if this works if you've never made money online before. Thought you'd want to see what I showed them my boss.");
     await sendImage(phone, OBJECTION_URL);
   }
-
   await delay(86400000);
   if (leads[phone] && !leads[phone].bought) {
     await sendVideo(phone, TESTIMONIAL_48HR_URL);
   }
-
   delete leads[phone];
 }
+
+// Admin panel
+app.get('/admin', (req, res) => {
+  const pass = req.query.pass;
+  if (pass !== ADMIN_PASSWORD) {
+    return res.send(`
+      <html><body style="font-family:sans-serif;padding:20px">
+        <h2>Admin Login</h2>
+        <form action="/admin" method="get">
+          <input type="password" name="pass" placeholder="Password" style="padding:8px;font-size:16px"/>
+          <button type="submit" style="padding:8px 16px;margin-left:8px">Login</button>
+        </form>
+      </body></html>
+    `);
+  }
+
+  const phones = Object.keys(conversations);
+  let html = `<html><body style="font-family:sans-serif;padding:20px;max-width:800px;margin:0 auto">
+    <h2>💬 Dollar Skill Admin</h2>
+    <p>${phones.length} active conversations</p>`;
+
+  if (phones.length === 0) {
+    html += '<p style="color:grey">No conversations yet.</p>';
+  }
+
+  phones.forEach(phone => {
+    const msgs = conversations[phone] || [];
+    const status = leads[phone] ? `Stage: ${leads[phone].stage}` : 'Sequence complete';
+    html += `
+      <div style="border:1px solid #ddd;border-radius:8px;padding:16px;margin-bottom:16px">
+        <h3 style="margin:0 0 8px">📱 ${phone} <span style="font-size:12px;color:grey">${status}</span></h3>
+        <div style="background:#f9f9f9;padding:12px;border-radius:4px;max-height:200px;overflow-y:auto;margin-bottom:12px">
+          ${msgs.map(m => `
+            <div style="margin-bottom:6px;text-align:${m.from === 'bot' ? 'right' : 'left'}">
+              <span style="background:${m.from === 'bot' ? '#dcf8c6' : '#fff'};border:1px solid #ddd;padding:4px 8px;border-radius:8px;display:inline-block;max-width:80%;font-size:14px">
+                ${m.text}
+              </span>
+              <div style="font-size:10px;color:grey">${new Date(m.time).toLocaleTimeString()}</div>
+            </div>
+          `).join('')}
+        </div>
+        <form action="/admin/reply" method="post" style="display:flex;gap:8px">
+          <input type="hidden" name="pass" value="${pass}"/>
+          <input type="hidden" name="phone" value="${phone}"/>
+          <input type="text" name="message" placeholder="Type reply..." style="flex:1;padding:8px;font-size:14px;border:1px solid #ddd;border-radius:4px"/>
+          <button type="submit" style="padding:8px 16px;background:#25d366;color:white;border:none;border-radius:4px;cursor:pointer">Send</button>
+        </form>
+      </div>`;
+  });
+
+  html += '</body></html>';
+  res.send(html);
+});
+
+app.post('/admin/reply', async (req, res) => {
+  const { pass, phone, message } = req.body;
+  if (pass !== ADMIN_PASSWORD) return res.redirect('/admin');
+  if (phone && message) {
+    await sendText(phone, message);
+  }
+  res.redirect(`/admin?pass=${pass}`);
+});
 
 app.get('/', (req, res) => res.send('Funnel is running'));
 
@@ -149,7 +209,11 @@ app.post('/webhook', async (req, res) => {
     if (!message) return;
 
     const phone = message.from;
-    console.log('Message from:', phone);
+    const text = message.text?.body || '[media]';
+    console.log('Message from:', phone, text);
+
+    if (!conversations[phone]) conversations[phone] = [];
+    conversations[phone].push({ from: 'customer', text, time: new Date().toISOString() });
 
     if (!leads[phone]) {
       leads[phone] = { stage: 'welcomed', bought: false };
