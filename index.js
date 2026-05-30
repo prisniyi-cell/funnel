@@ -1,3 +1,4 @@
+console.log('Node version:', process.version);
 const express = require('express');
 const app = express();
 app.use(express.json());
