@@ -42,32 +42,68 @@ function sendText(to, message) {
   });
 }
 
+function sendImage(to, url) {
+  return sendRequest(`/v19.0/${PHONE_NUMBER_ID}/messages`, {
+    messaging_product: 'whatsapp',
+    to,
+    type: 'image',
+    image: { link: url }
+  });
+}
+
+function sendAudio(to, url) {
+  return sendRequest(`/v19.0/${PHONE_NUMBER_ID}/messages`, {
+    messaging_product: 'whatsapp',
+    to,
+    type: 'audio',
+    audio: { link: url }
+  });
+}
+
+function sendVideo(to, url) {
+  return sendRequest(`/v19.0/${PHONE_NUMBER_ID}/messages`, {
+    messaging_product: 'whatsapp',
+    to,
+    type: 'video',
+    video: { link: url }
+  });
+}
+
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function runSequence(phone) {
-  const VOICE_NOTE_URL = 'PLACEHOLDER_VOICE_NOTE_URL';
-  const PHOTO1_URL = 'PLACEHOLDER_PHOTO1_URL';
-  const PHOTO2_URL = 'PLACEHOLDER_PHOTO2_URL';
-  const PHOTO3_URL = 'PLACEHOLDER_PHOTO3_URL';
-  const VIDEO_URL = 'PLACEHOLDER_VIDEO_URL';
-  const OBJECTION_SCREENSHOT_URL = 'PLACEHOLDER_OBJECTION_URL';
-  const TESTIMONIAL_48HR_URL = 'PLACEHOLDER_TESTIMONIAL_URL';
+  const VOICE_NOTE_URL = 'https://res.cloudinary.com/dpknwoywz/video/upload/v1780175029/voicenote.m4a_myqyex.m4a';
+  const PHOTO1_URL = 'https://res.cloudinary.com/dpknwoywz/image/upload/v1780173251/photo_2026-05-30_15-07-57_yznnlq.jpg';
+  const PHOTO2_URL = 'https://res.cloudinary.com/dpknwoywz/image/upload/v1780173238/photo_2026-05-30_15-10-04_m6fkek.jpg';
+  const PHOTO3_URL = 'https://res.cloudinary.com/dpknwoywz/image/upload/v1780173200/photo_2026-05-30_15-11-57_lxnwd6.jpg';
+  const VIDEO_URL = 'https://res.cloudinary.com/dpknwoywz/video/upload/v1780173788/video_2026-05-30_15-12-27_t9aoqf.mp4';
+  const OBJECTION_URL = 'https://res.cloudinary.com/dpknwoywz/image/upload/v1780176996/photo_2026-05-30_15-09-09_lnzooq.jpg';
+  const TESTIMONIAL_48HR_URL = 'https://res.cloudinary.com/dpknwoywz/video/upload/v1780176890/copy_AE270DFE-4121-4D3C-A869-DB0D674F4DDE_dsly51.mov';
 
-  await sendText(phone, "test - sequence running");
-  await delay(15000);
-  await sendText(phone, "Photo 1 placeholder");
   await delay(20000);
-  await sendText(phone, "Photo 2 placeholder");
+  await sendAudio(phone, VOICE_NOTE_URL);
+
   await delay(20000);
-  await sendText(phone, "Photo 3 placeholder");
+  await sendImage(phone, PHOTO1_URL);
+
   await delay(20000);
-  await sendText(phone, "Video placeholder");
-  await delay(30000);
-  await sendText(phone, "Daniel, who put me on, recorded a full breakdown of everything 👇🏾. The first 5 minutes alone will show you why this is completely different from every forex, crypto and annoying MLM thing you've seen before. https://youtu.be/fESbDk6ngWk");
-  await delay(120000);
-  await sendText(phone, "AND I know what you're thinking, 'this won't work for me', 'I've tried a lot, wasting my time again would suck'. That's exactly what I thought too. Until I actually started. Now I'm just coming back from a trip like I told you 🙂‍↔️\n\nFor N50,000 with no hidden costs, you get the transparent print you need. Step by step processes with no fancy setup. Results within days to weeks if you implement. The kind of income that lets you travel, pay rent without thinking twice, take care of your family. An active community to ginger you to get your bag. And a 30-day money back guarantee. I will personally even apologise publicly for wasting your time if you implement everything 🙂‍↔️\n\nYou're the only one that can stop yourself.\n\nLike I said we don't want this to cast and 73 people already got inside. Price moves to N150,000 at 100.\nhttps://app.expertnaire.com/product/8646634117/8478632445");
+  await sendImage(phone, PHOTO2_URL);
+
+  await delay(20000);
+  await sendImage(phone, PHOTO3_URL);
+
+  await delay(20000);
+  await sendVideo(phone, VIDEO_URL);
+
+  await delay(20000);
+  await sendText(phone, "A lot of people ask me what the 'update' actually looks like in practice. Daniel in our circle recorded a quick video showing exactly how it's set up 🙂‍↔️: https://youtu.be/fESbDk6ngWk. It's pretty straightforward. The first 5 minutes alone will show you why this is completely different");
+
+  await delay(1500000);
+
+  await sendText(phone, "AND I know what you're thinking, 'this won't work for me', 'I've tried a lot, wasting my time again would suck'. That's exactly what I thought too. Until I actually started. Now I'm just coming back from a trip like I told you 🙂‍↔️\n\nFor N50,000, you get the kind of income that lets you travel, pay rent without thinking twice, take care of your family without stress. Results within days to weeks if you implement. An active community to ginger you to get your bag. And a 30-day money back guarantee. I will personally even apologise publicly for wasting your time if you implement everything 🙂‍↔️\n\nYou're the only one that can stop yourself.\n\nLike I said we don't want this to cast and 73 people already got inside. Price moves to N150,000 at 100.\nhttps://app.expertnaire.com/product/8646634117/8478632445");
+
   await delay(20000);
   await sendText(phone, "Any questions before you get your big bag?");
 
@@ -75,12 +111,15 @@ async function runSequence(phone) {
 
   await delay(86400000);
   if (leads[phone] && !leads[phone].bought) {
-    await sendText(phone, "Someone just asked me if this works if you've never made money online before. Thought you'd want to see what I told them my boss.");
+    await sendText(phone, "Someone just asked me if this works if you've never made money online before. Thought you'd want to see what I showed them my boss.");
+    await sendImage(phone, OBJECTION_URL);
   }
+
   await delay(86400000);
   if (leads[phone] && !leads[phone].bought) {
-    await sendText(phone, "48hr testimonial");
+    await sendVideo(phone, TESTIMONIAL_48HR_URL);
   }
+
   delete leads[phone];
 }
 
@@ -104,18 +143,18 @@ app.post('/webhook', async (req, res) => {
     const entry = req.body?.entry?.[0];
     const changes = entry?.changes?.[0];
     const message = changes?.value?.messages?.[0];
-    if (!message) {
-      console.log('No message found in payload');
-      return;
-    }
+    if (!message) return;
+
     const phone = message.from;
     console.log('Message from:', phone);
 
     if (!leads[phone]) {
       leads[phone] = { stage: 'welcomed', bought: false };
+      await delay(15000);
       await sendText(phone, "Heyy, welcome to the inner circle🦅. You're here so it means you're serious. Let's get into it, what's your name?");
       return;
     }
+
     if (leads[phone].stage === 'welcomed' && !leads[phone].sequenceStarted) {
       leads[phone].stage = 'sequence';
       leads[phone].sequenceStarted = true;
