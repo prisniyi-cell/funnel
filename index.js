@@ -100,6 +100,9 @@ async function runSequence(phone) {
   await delay(20000);
   await sendText(phone, "A lot of people ask me what the 'update' actually looks like in practice. Daniel in our circle recorded a quick video showing exactly how it's set up 🙂‍↔️: https://youtu.be/fESbDk6ngWk. It's pretty straightforward. The first 5 minutes alone will show you why this is completely different");
 
+   await delay(20000);
+  await sendText(phone, "Take your time to digest it");
+
   await delay(1500000);
 
   await sendText(phone, "AND I know what you're thinking, 'this won't work for me', 'I've tried a lot, wasting my time again would suck'. That's exactly what I thought too. Until I actually started. Now I'm just coming back from a trip like I told you 🙂‍↔️\n\nFor N50,000, you get the kind of income that lets you travel, pay rent without thinking twice, take care of your family without stress. Results within days to weeks if you implement. An active community to ginger you to get your bag. And a 30-day money back guarantee. I will personally even apologise publicly for wasting your time if you implement everything 🙂‍↔️\n\nYou're the only one that can stop yourself.\n\nLike I said we don't want this to cast and 73 people already got inside. Price moves to N150,000 at 100.\nhttps://app.expertnaire.com/product/8646634117/8478632445");
