@@ -106,7 +106,7 @@ async function runSequence(phone) {
   await delay(20000);
   await sendVideo(phone, VIDEO_URL);
   await delay(20000);
-  await sendText(phone, "A lot of people ask me what the 'update' actually looks like in practice. Daniel in our circle and I recorded a quick video showing exactly how it's set up 🙂‍↔️ The first 5 minutes alone will show you why this is completely different. Should I send it over to you now?");
+  await sendText(phone, "Daniel and I recorded a quick video about exactly how this blueprint will be printing your lifestyle every single day showing you how it's set up 🙂‍↔️ The first 5 minutes alone will show you why this is completely different. Should I send it over to you now?");
 
   leads[phone].stage = 'waiting_for_permission';
 
@@ -115,7 +115,7 @@ async function runSequence(phone) {
   // Only continue if they haven't responded (still in waiting_for_permission)
   if (leads[phone] && leads[phone].stage === 'waiting_for_permission') {
     leads[phone].stage = 'pitch_sent';
-    await sendText(phone, "AND I know what you're thinking, 'this won't work for me', 'I've tried a lot, wasting my time again would suck'. That's exactly what I thought too. Until I actually started. Now I'm just coming back from a trip like I told you 🙂‍↔️\n\nFor N50,000, you get the kind of income that lets you travel, pay rent without thinking twice, take care of your family without stress. Results within days to weeks if you implement. An active community to ginger you to get your bag. And a 30-day money back guarantee. I will personally even apologise publicly for wasting your time if you implement everything 🙂‍↔️\n\nYou're the only one that can stop yourself.\n\nLike I said we don't want this to cast and 73 people already got inside. Price moves to N150,000 at 100.\nhttps://app.expertnaire.com/product/8646634117/8478632445");
+    await sendText(phone, "Did that video make sense to you? If it did, you're already ahead of 90% of people trying to make money online. You have everything you need to start seeing results within days.\n\nAND I know what you're thinking, 'this won't work for me', 'I've tried a lot, wasting my time again would suck'. That's exactly what I thought too. Until I actually started. Now I'm just coming back from a trip like I told you 🙂‍↔️\n\nFor N50,000, you get the kind of income that lets you travel, pay rent without thinking twice, take care of your family without stress. Results within days to weeks if you implement. An active community to ginger you to get your bag. And a 30-day money back guarantee. I will personally apologise publicly for wasting your time if you implement everything and still don't change your income drastically 🙂‍↔️\n\nYou're the only one that can stop yourself.\n\nLike I said we don't want this to cast and 73 people already got inside. Price moves to N150,000 at 100.\nhttps://app.expertnaire.com/product/8646634117/8478632445");
     await delay(20000);
     await sendText(phone, "Any questions before you get your big bag?");
   }
@@ -247,7 +247,7 @@ app.post('/webhook', async (req, res) => {
       if (positive.some(w => text.includes(w))) {
         leads[phone].stage = 'sent_video';
         await sendVideo(phone, VIDEO_45MIN_URL);
-        await sendText(phone, "Okay take your time to digest it. Reply 'DONE' once you've finished watching so I can show you how to get set up.");
+        await sendText(phone, "Okay take your time to digest it. Access it here: [YouTube link]. Reply 'Done' once you've finished watching so I can show you how to get set up.");
       }
       return;
     }
@@ -255,7 +255,7 @@ app.post('/webhook', async (req, res) => {
     // Handle DONE after watching the video
     if (leads[phone].stage === 'sent_video' && text.includes('done')) {
       leads[phone].stage = 'pitch_sent';
-      await sendText(phone, "AND I know what you're thinking, 'this won't work for me', 'I've tried a lot, wasting my time again would suck'. That's exactly what I thought too. Until I actually started. Now I'm just coming back from a trip like I told you 🙂‍↔️\n\nFor N50,000, you get the kind of income that lets you travel, pay rent without thinking twice, take care of your family without stress. Results within days to weeks if you implement. An active community to ginger you to get your bag. And a 30-day money back guarantee. I will personally even apologise publicly for wasting your time if you implement everything 🙂‍↔️\n\nYou're the only one that can stop yourself.\n\nLike I said we don't want this to cast and 73 people already got inside. Price moves to N150,000 at 100.\nhttps://app.expertnaire.com/product/8646634117/8478632445");
+      await sendText(phone, "Did that video make sense to you? If it did, you're already ahead of 90% of people trying to make money online. You have everything you need to start seeing results within days.\n\nAND I know what you're thinking, 'this won't work for me', 'I've tried a lot, wasting my time again would suck'. That's exactly what I thought too. Until I actually started. Now I'm just coming back from a trip like I told you 🙂‍↔️\n\nFor N50,000, you get the kind of income that lets you travel, pay rent without thinking twice, take care of your family without stress. Results within days to weeks if you implement. An active community to ginger you to get your bag. And a 30-day money back guarantee. I will personally apologise publicly for wasting your time if you implement everything and still don't change your income drastically 🙂‍↔️\n\nYou're the only one that can stop yourself.\n\nLike I said we don't want this to cast and 73 people already got inside. Price moves to N150,000 at 100.\nhttps://app.expertnaire.com/product/8646634117/8478632445");
       await delay(20000);
       await sendText(phone, "Any questions before you get your big bag?");
       return;
