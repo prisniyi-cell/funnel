@@ -1,10 +1,3 @@
-Got the price VN URL:
-
-`https://res.cloudinary.com/dpknwoywz/video/upload/v1780247025/Vaurie_second_vn_kz13gy.m4a`
-
-Now code time. Pasting full updated code:
-
-```javascript
 const express = require('express');
 const https = require('https');
 const fs = require('fs');
@@ -300,6 +293,3 @@ app.post('/webhook', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log('Server running on port ' + PORT));
-```
-
-Paste into GitHub → commit → test on your number. 🦅
