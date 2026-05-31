@@ -11,6 +11,16 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "dollarskill999";
 const leads = {};
 const conversations = {};
 
+// Media URLs
+const VOICE_NOTE_URL = 'https://res.cloudinary.com/dpknwoywz/video/upload/v1780175029/voicenote.m4a_myqyex.m4a';
+const PHOTO1_URL = 'https://res.cloudinary.com/dpknwoywz/image/upload/v1780173251/photo_2026-05-30_15-07-57_yznnlq.jpg';
+const PHOTO2_URL = 'https://res.cloudinary.com/dpknwoywz/image/upload/v1780173238/photo_2026-05-30_15-10-04_m6fkek.jpg';
+const PHOTO3_URL = 'https://res.cloudinary.com/dpknwoywz/image/upload/v1780173200/photo_2026-05-30_15-11-57_lxnwd6.jpg';
+const VIDEO_URL = 'https://res.cloudinary.com/dpknwoywz/video/upload/v1780173788/video_2026-05-30_15-12-27_t9aoqf.mp4';
+const OBJECTION_URL = 'https://res.cloudinary.com/dpknwoywz/image/upload/v1780176996/photo_2026-05-30_15-09-09_lnzooq.jpg';
+const TESTIMONIAL_48HR_URL = 'https://res.cloudinary.com/dpknwoywz/video/upload/v1780176890/copy_AE270DFE-4121-4D3C-A869-DB0D674F4DDE_dsly51.mov';
+const VIDEO_45MIN_URL = process.env.VIDEO_45MIN_URL || ''; // Set this in your environment variables
+
 function sendRequest(path, data) {
   return new Promise((resolve, reject) => {
     const body = JSON.stringify(data);
@@ -85,14 +95,6 @@ function delay(ms) {
 }
 
 async function runSequence(phone) {
-  const VOICE_NOTE_URL = 'https://res.cloudinary.com/dpknwoywz/video/upload/v1780175029/voicenote.m4a_myqyex.m4a';
-  const PHOTO1_URL = 'https://res.cloudinary.com/dpknwoywz/image/upload/v1780173251/photo_2026-05-30_15-07-57_yznnlq.jpg';
-  const PHOTO2_URL = 'https://res.cloudinary.com/dpknwoywz/image/upload/v1780173238/photo_2026-05-30_15-10-04_m6fkek.jpg';
-  const PHOTO3_URL = 'https://res.cloudinary.com/dpknwoywz/image/upload/v1780173200/photo_2026-05-30_15-11-57_lxnwd6.jpg';
-  const VIDEO_URL = 'https://res.cloudinary.com/dpknwoywz/video/upload/v1780173788/video_2026-05-30_15-12-27_t9aoqf.mp4';
-  const OBJECTION_URL = 'https://res.cloudinary.com/dpknwoywz/image/upload/v1780176996/photo_2026-05-30_15-09-09_lnzooq.jpg';
-  const TESTIMONIAL_48HR_URL = 'https://res.cloudinary.com/dpknwoywz/video/upload/v1780176890/copy_AE270DFE-4121-4D3C-A869-DB0D674F4DDE_dsly51.mov';
-
   await delay(20000);
   await sendAudio(phone, VOICE_NOTE_URL);
   await delay(20000);
@@ -106,18 +108,17 @@ async function runSequence(phone) {
   await delay(20000);
   await sendText(phone, "A lot of people ask me what the 'update' actually looks like in practice. Daniel in our circle and I recorded a quick video showing exactly how it's set up 🙂‍↔️ The first 5 minutes alone will show you why this is completely different. Should I send it over to you now?");
 
-    } else if (leads[phone].stage === 'waiting_for_permission') {
-        const positive = ["yes", "yeah", "sure", "ok", "okay", "please", "send", "go ahead"];
-        if (positive.some(w => text.includes(w))) {
-            leads[phone].stage = 'sent_video';
-            await sendVideo(phone, VIDEO_45MIN_URL);
-            await sendText(phone, "Take your time with this. Reply 'DONE' once you've finished watching so I can show you how to get your account set up.");
-        }
-    
+  leads[phone].stage = 'waiting_for_permission';
+
   await delay(1500000);
-  await sendText(phone, "AND I know what you're thinking, 'this won't work for me', 'I've tried a lot, wasting my time again would suck'. That's exactly what I thought too. Until I actually started. Now I'm just coming back from a trip like I told you 🙂‍↔️\n\nFor N50,000, you get the kind of income that lets you travel, pay rent without thinking twice, take care of your family without stress. Results within days to weeks if you implement. An active community to ginger you to get your bag. And a 30-day money back guarantee. I will personally even apologise publicly for wasting your time if you implement everything 🙂‍↔️\n\nYou're the only one that can stop yourself.\n\nLike I said we don't want this to cast and 73 people already got inside. Price moves to N150,000 at 100.\nhttps://app.expertnaire.com/product/8646634117/8478632445");
-  await delay(20000);
-  await sendText(phone, "Any questions before you get your big bag?");
+
+  // Only continue if they haven't responded (still in waiting_for_permission)
+  if (leads[phone] && leads[phone].stage === 'waiting_for_permission') {
+    leads[phone].stage = 'pitch_sent';
+    await sendText(phone, "AND I know what you're thinking, 'this won't work for me', 'I've tried a lot, wasting my time again would suck'. That's exactly what I thought too. Until I actually started. Now I'm just coming back from a trip like I told you 🙂‍↔️\n\nFor N50,000, you get the kind of income that lets you travel, pay rent without thinking twice, take care of your family without stress. Results within days to weeks if you implement. An active community to ginger you to get your bag. And a 30-day money back guarantee. I will personally even apologise publicly for wasting your time if you implement everything 🙂‍↔️\n\nYou're the only one that can stop yourself.\n\nLike I said we don't want this to cast and 73 people already got inside. Price moves to N150,000 at 100.\nhttps://app.expertnaire.com/product/8646634117/8478632445");
+    await delay(20000);
+    await sendText(phone, "Any questions before you get your big bag?");
+  }
 
   leads[phone].sequenceDone = true;
 
@@ -218,12 +219,13 @@ app.post('/webhook', async (req, res) => {
     if (!message) return;
 
     const phone = message.from;
-    const text = message.text?.body || '[media]';
+    const text = (message.text?.body || '[media]').toLowerCase().trim();
     console.log('Message from:', phone, text);
 
     if (!conversations[phone]) conversations[phone] = [];
-    conversations[phone].push({ from: 'customer', text, time: new Date().toISOString() });
+    conversations[phone].push({ from: 'customer', text: message.text?.body || '[media]', time: new Date().toISOString() });
 
+    // New lead
     if (!leads[phone]) {
       leads[phone] = { stage: 'welcomed', bought: false };
       await delay(15000);
@@ -231,12 +233,34 @@ app.post('/webhook', async (req, res) => {
       return;
     }
 
+    // Start sequence after they give their name
     if (leads[phone].stage === 'welcomed' && !leads[phone].sequenceStarted) {
       leads[phone].stage = 'sequence';
       leads[phone].sequenceStarted = true;
       runSequence(phone);
       return;
     }
+
+    // Handle permission to send the 45-min video
+    if (leads[phone].stage === 'waiting_for_permission') {
+      const positive = ["yes", "yeah", "sure", "ok", "okay", "please", "send", "go ahead", "yep", "yh", "y"];
+      if (positive.some(w => text.includes(w))) {
+        leads[phone].stage = 'sent_video';
+        await sendVideo(phone, VIDEO_45MIN_URL);
+        await sendText(phone, "Okay take your time to digest it. Reply 'DONE' once you've finished watching so I can show you how to get set up.");
+      }
+      return;
+    }
+
+    // Handle DONE after watching the video
+    if (leads[phone].stage === 'sent_video' && text.includes('done')) {
+      leads[phone].stage = 'pitch_sent';
+      await sendText(phone, "AND I know what you're thinking, 'this won't work for me', 'I've tried a lot, wasting my time again would suck'. That's exactly what I thought too. Until I actually started. Now I'm just coming back from a trip like I told you 🙂‍↔️\n\nFor N50,000, you get the kind of income that lets you travel, pay rent without thinking twice, take care of your family without stress. Results within days to weeks if you implement. An active community to ginger you to get your bag. And a 30-day money back guarantee. I will personally even apologise publicly for wasting your time if you implement everything 🙂‍↔️\n\nYou're the only one that can stop yourself.\n\nLike I said we don't want this to cast and 73 people already got inside. Price moves to N150,000 at 100.\nhttps://app.expertnaire.com/product/8646634117/8478632445");
+      await delay(20000);
+      await sendText(phone, "Any questions before you get your big bag?");
+      return;
+    }
+
   } catch (err) {
     console.error('Webhook error:', err.message, err.stack);
   }
