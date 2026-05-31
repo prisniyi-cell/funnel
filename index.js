@@ -1,3 +1,10 @@
+Got the price VN URL:
+
+`https://res.cloudinary.com/dpknwoywz/video/upload/v1780247025/Vaurie_second_vn_kz13gy.m4a`
+
+Now code time. Pasting full updated code:
+
+```javascript
 const express = require('express');
 const https = require('https');
 const fs = require('fs');
@@ -32,13 +39,11 @@ const leads = data.leads;
 const conversations = data.conversations;
 
 const VOICE_NOTE_URL = 'https://res.cloudinary.com/dpknwoywz/video/upload/v1780175029/voicenote.m4a_myqyex.m4a';
-const PHOTO1_URL = 'https://res.cloudinary.com/dpknwoywz/image/upload/v1780173251/photo_2026-05-30_15-07-57_yznnlq.jpg';
-const PHOTO2_URL = 'https://res.cloudinary.com/dpknwoywz/image/upload/v1780173238/photo_2026-05-30_15-10-04_m6fkek.jpg';
-const PHOTO3_URL = 'https://res.cloudinary.com/dpknwoywz/image/upload/v1780173200/photo_2026-05-30_15-11-57_lxnwd6.jpg';
-const VIDEO_URL = 'https://res.cloudinary.com/dpknwoywz/video/upload/v1780173788/video_2026-05-30_15-12-27_t9aoqf.mp4';
+const PRICE_VN_URL = 'https://res.cloudinary.com/dpknwoywz/video/upload/v1780247025/Vaurie_second_vn_kz13gy.m4a';
 const OBJECTION_URL = 'https://res.cloudinary.com/dpknwoywz/image/upload/v1780176996/photo_2026-05-30_15-09-09_lnzooq.jpg';
 const TESTIMONIAL_48HR_URL = 'https://res.cloudinary.com/dpknwoywz/video/upload/v1780176890/copy_AE270DFE-4121-4D3C-A869-DB0D674F4DDE_dsly51.mov';
 const YOUTUBE_URL = 'https://youtu.be/fESbDk6ngWk';
+const AFFILIATE_URL = 'https://app.expertnaire.com/product/8646634117/8478632445';
 
 function sendRequest(path, data) {
   return new Promise((resolve, reject) => {
@@ -65,7 +70,6 @@ function sendRequest(path, data) {
 }
 
 function sendText(to, message) {
-  console.log('Sending text to:', to);
   if (!conversations[to]) conversations[to] = [];
   conversations[to].push({ from: 'bot', text: message, time: new Date().toISOString() });
   saveData();
@@ -74,18 +78,6 @@ function sendText(to, message) {
     to,
     type: 'text',
     text: { body: message }
-  });
-}
-
-function sendImage(to, url) {
-  if (!conversations[to]) conversations[to] = [];
-  conversations[to].push({ from: 'bot', text: '[Image]', time: new Date().toISOString() });
-  saveData();
-  return sendRequest(`/v19.0/${PHONE_NUMBER_ID}/messages`, {
-    messaging_product: 'whatsapp',
-    to,
-    type: 'image',
-    image: { link: url }
   });
 }
 
@@ -98,6 +90,18 @@ function sendAudio(to, url) {
     to,
     type: 'audio',
     audio: { link: url }
+  });
+}
+
+function sendImage(to, url) {
+  if (!conversations[to]) conversations[to] = [];
+  conversations[to].push({ from: 'bot', text: '[Image]', time: new Date().toISOString() });
+  saveData();
+  return sendRequest(`/v19.0/${PHONE_NUMBER_ID}/messages`, {
+    messaging_product: 'whatsapp',
+    to,
+    type: 'image',
+    image: { link: url }
   });
 }
 
@@ -115,65 +119,6 @@ function sendVideo(to, url) {
 
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function sendPitch(phone) {
-  await sendText(phone, "You're already ahead of 90% of people trying to make money online. You have everything you need to start seeing results within days.\n\nAND I know what you're thinking, 'this won't work for me', 'I've tried a lot, wasting my time again would suck'. That's exactly what I thought too. Until I actually started. Now I'm just coming back from a trip like I told you 🙂‍↔️\n\nFor N50,000, you get the kind of income that lets you travel, pay rent without thinking twice, take care of your family without stress. Results within days to weeks if you implement. An active community to ginger you to get your bag. And a 30-day money back guarantee. I will personally apologise publicly for wasting your time if you implement everything and still don't change your income drastically 🙂‍↔️\n\nYou're the only one that can stop yourself.\n\nLike I said we don't want this to cast and 73 people already got inside. Price moves to N150,000 at 100.\nhttps://app.expertnaire.com/product/8646634117/8478632445");
-  await delay(10000);
-  await sendText(phone, "Any questions before you get your big bag?");
-  if (leads[phone]) {
-    leads[phone].sequenceDone = true;
-    saveData();
-  }
-}
-
-async function runSequence(phone) {
-  await delay(20000);
-  await sendText(phone, "Save my name as Vaurie 🦅 I usually reveal untapped hot updates every week.");
-  await delay(10000);
-  await sendAudio(phone, VOICE_NOTE_URL);
-
-  await delay(20000);
-  await sendImage(phone, PHOTO1_URL);
-  await delay(20000);
-  await sendImage(phone, PHOTO2_URL);
-  await delay(20000);
-  await sendImage(phone, PHOTO3_URL);
-  await delay(20000);
-  await sendVideo(phone, VIDEO_URL);
-
-  await delay(20000);
-  await sendText(phone, "Daniel and I recorded a quick video about exactly how this blueprint will be printing your lifestyle every single day showing you how it's set up 🙂‍↔️ The first 5 minutes alone will show you why this is completely different. Should I send it over to you now?");
-
-  if (leads[phone]) {
-    leads[phone].stage = 'waiting_for_permission';
-    saveData();
-  }
-
-  // 25 min fallback
-  await delay(1500000);
-
-  if (leads[phone] && leads[phone].stage === 'waiting_for_permission') {
-    leads[phone].stage = 'pitch_sent';
-    saveData();
-    await sendPitch(phone);
-  }
-
-  // 24hr follow up
-  await delay(86400000);
-  if (leads[phone] && !leads[phone].bought) {
-    await sendText(phone, "Someone just asked me if this works if you've never made money online before. Thought you'd want to see what I showed them my boss.");
-    await sendImage(phone, OBJECTION_URL);
-  }
-
-  // 48hr follow up
-  await delay(86400000);
-  if (leads[phone] && !leads[phone].bought) {
-    await sendVideo(phone, TESTIMONIAL_48HR_URL);
-  }
-
-  delete leads[phone];
-  saveData();
 }
 
 // Admin panel
@@ -232,9 +177,7 @@ app.get('/admin', (req, res) => {
 app.post('/admin/reply', async (req, res) => {
   const { pass, phone, message } = req.body;
   if (pass !== ADMIN_PASSWORD) return res.redirect('/admin');
-  if (phone && message) {
-    await sendText(phone, message);
-  }
+  if (phone && message) await sendText(phone, message);
   res.redirect(`/admin?pass=${pass}`);
 });
 
@@ -254,7 +197,6 @@ app.get('/webhook', (req, res) => {
 app.post('/webhook', async (req, res) => {
   res.sendStatus(200);
   try {
-    console.log('Webhook received:', JSON.stringify(req.body));
     const entry = req.body?.entry?.[0];
     const changes = entry?.changes?.[0];
     const message = changes?.value?.messages?.[0];
@@ -268,52 +210,86 @@ app.post('/webhook', async (req, res) => {
     conversations[phone].push({ from: 'customer', text: message.text?.body || '[media]', time: new Date().toISOString() });
     saveData();
 
-    // New lead
+    // NEW LEAD
     if (!leads[phone]) {
-      leads[phone] = { stage: 'welcomed', bought: false };
+      leads[phone] = { stage: 'new', bought: false };
       saveData();
       await delay(15000);
       await sendText(phone, "Heyy, welcome to the inner circle🦅. You're here so it means you're serious. Let's get into it, what's your name?");
-      return;
-    }
-
-    // Start sequence after name
-    if (leads[phone].stage === 'welcomed' && !leads[phone].sequenceStarted) {
-      leads[phone].stage = 'sequence';
-      leads[phone].sequenceStarted = true;
+      leads[phone].stage = 'waiting_name';
       saveData();
-      runSequence(phone);
       return;
     }
 
-    // Positive triggers for "should I send it?"
-    if (leads[phone].stage === 'waiting_for_permission') {
-      const positive = ["yes", "yh", "yeah", "sure", "ok", "okay", "yep", "yup", "y", "send", "go ahead", "please", "definitely", "absolutely", "of course", "why not", "lets go", "let's go", "sounds good"];
+    // MSG 2 — after name
+    if (leads[phone].stage === 'waiting_name') {
+      leads[phone].stage = 'waiting_pain_point';
+      saveData();
+      await delay(20000);
+      await sendAudio(phone, VOICE_NOTE_URL);
+      await delay(15000);
+      await sendText(phone, "Okay real talk, I was just going to send this to everyone who messaged but I actually care about helping every single person actually print dollars everyday, not just sending links. Have you tried making money online before or is this your first time exploring it?");
+      return;
+    }
+
+    // MSG 4 — after pain point reply
+    if (leads[phone].stage === 'waiting_pain_point') {
+      leads[phone].stage = 'waiting_permission';
+      saveData();
+      await delay(20000);
+      await sendText(phone, "Okay this update is for exactly where you are. I have a full 45-minute breakdown — there's a specific part in it that shows why this is different from probably everything you've tried before. Would you like me to send it?");
+      return;
+    }
+
+    // MSG 5 — positive reply to send video
+    if (leads[phone].stage === 'waiting_permission') {
+      const positive = ["yes", "yh", "yeah", "yep", "ok", "okay", "sure", "go on", "definitely", "absolutely", "of course", "why not", "lets go", "let's go", "sounds good", "send", "please", "gladly", "for sure", "do it", "sure thing", "oya", "yes please"];
       if (positive.some(w => text.includes(w))) {
-        leads[phone].stage = 'video_sent';
-        saveData();
-        await delay(10000);
-        await sendText(phone, "Okay take your time to digest it. Your journey starts here: " + YOUTUBE_URL + "\n\nReply 'Done' once you've finished watching so I can show you how to get set up 🦅");
-      }
-      return;
-    }
-
-    // After video - "done" in any case triggers next message
-    if (leads[phone].stage === 'video_sent') {
-      if (text.includes('done')) {
-        leads[phone].stage = 'asked_about_video';
+        leads[phone].stage = 'waiting_done';
         saveData();
         await delay(20000);
-        await sendText(phone, "That video breaks down exactly how we're hitting these numbers every single month. Does it look like something you would comfortably plug into your daily routine?");
+        await sendText(phone, "Take your time with it. " + YOUTUBE_URL + ". You reached out because you know your current situation needs a change. This breakdown is the bridge to that new era 🦅 Reply 'Done' when you're finished and I'll help you get set up.");
       }
       return;
     }
 
-    // Any reply fires pitch
-    if (leads[phone].stage === 'asked_about_video') {
+    // MSG 6 — after done
+    if (leads[phone].stage === 'waiting_done') {
+      if (text.includes('done')) {
+        leads[phone].stage = 'waiting_plug_reply';
+        saveData();
+        await delay(20000);
+        await sendText(phone, "Kudos to you 🙂‍↔️. That video is the exact system of how we're hitting these numbers every single month. Does it look like something you would comfortably plug into your daily routine or would it be a struggle for you?");
+      }
+      return;
+    }
+
+    // MSG 7-9 — any reply fires price sequence
+    if (leads[phone].stage === 'waiting_plug_reply') {
       leads[phone].stage = 'pitch_sent';
       saveData();
-      await sendPitch(phone);
+      await delay(25000);
+      await sendAudio(phone, PRICE_VN_URL);
+      await delay(10000);
+      await sendText(phone, "Since we've covered the mechanics, you can jump in here: " + AFFILIATE_URL + ". Once you're in, take a look at the latest reviews from the community. See you there!");
+      await delay(10000);
+      await sendText(phone, "Any questions before you get your big bag?");
+
+      // 24hr follow up
+      await delay(86400000);
+      if (leads[phone] && !leads[phone].bought) {
+        await sendText(phone, "Someone just asked me if this works if you've never made money online before. Thought you'd want to see what I showed them my boss.");
+        await sendImage(phone, OBJECTION_URL);
+      }
+
+      // 48hr follow up
+      await delay(86400000);
+      if (leads[phone] && !leads[phone].bought) {
+        await sendVideo(phone, TESTIMONIAL_48HR_URL);
+      }
+
+      delete leads[phone];
+      saveData();
       return;
     }
 
@@ -324,3 +300,6 @@ app.post('/webhook', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log('Server running on port ' + PORT));
+```
+
+Paste into GitHub → commit → test on your number. 🦅
