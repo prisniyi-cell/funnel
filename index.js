@@ -101,7 +101,6 @@ async function sendPitch(phone) {
 }
 
 async function runSequence(phone) {
-  // After name - 20 sec delay, save name message, 10 sec, then VN
   await delay(20000);
   await sendText(phone, "Save my name as Vaurie 🦅 I usually reveal untapped hot updates every week.");
   await delay(10000);
@@ -115,12 +114,13 @@ async function runSequence(phone) {
   await sendImage(phone, PHOTO3_URL);
   await delay(20000);
   await sendVideo(phone, VIDEO_URL);
+
   await delay(20000);
   await sendText(phone, "Daniel and I recorded a quick video about exactly how this blueprint will be printing your lifestyle every single day showing you how it's set up 🙂‍↔️ The first 5 minutes alone will show you why this is completely different. Should I send it over to you now?");
 
   leads[phone].stage = 'waiting_for_permission';
 
-  // 25 min timer - fires pitch if they never responded
+  // 25 min fallback - fires pitch if no response
   await delay(1500000);
 
   if (leads[phone] && leads[phone].stage === 'waiting_for_permission') {
@@ -251,23 +251,31 @@ app.post('/webhook', async (req, res) => {
       return;
     }
 
-    // Handle permission to send YouTube link
+    // Positive triggers for "should I send it?"
     if (leads[phone].stage === 'waiting_for_permission') {
-      const positive = ["yes", "yeah", "sure", "ok", "okay", "please", "send", "go ahead", "yep", "yh", "y"];
+      const positive = ["yes", "yh", "yeah", "sure", "ok", "okay", "yep", "yup", "y", "send", "go ahead", "please", "definitely", "absolutely", "of course", "why not", "lets go", "let's go", "sounds good"];
       if (positive.some(w => text.includes(w))) {
         leads[phone].stage = 'video_sent';
-        await sendText(phone, "Your journey starts here: " + YOUTUBE_URL);
+        await delay(10000);
+        await sendText(phone, "Okay take your time to digest it. Your journey starts here: " + YOUTUBE_URL + "\n\nReply 'Done' once you've finished watching so I can show you how to get set up 🦅");
       }
       return;
     }
 
-    // Handle after video - any positive reply fires pitch
+    // After video - "done" in any case triggers next message
     if (leads[phone].stage === 'video_sent') {
-      const positive = ["yes", "yeah", "sure", "ok", "okay", "done", "watched", "yh", "y", "seen it", "makes sense"];
-      if (positive.some(w => text.includes(w))) {
-        leads[phone].stage = 'pitch_sent';
-        await sendPitch(phone);
+      if (text.includes('done')) {
+        leads[phone].stage = 'asked_about_video';
+        await delay(20000);
+        await sendText(phone, "That video breaks down exactly how we're hitting these numbers every single month. Does it look like something you would comfortably plug into your daily routine?");
       }
+      return;
+    }
+
+    // Any reply to "does it look like something you'd plug in" fires pitch
+    if (leads[phone].stage === 'asked_about_video') {
+      leads[phone].stage = 'pitch_sent';
+      await sendPitch(phone);
       return;
     }
 
