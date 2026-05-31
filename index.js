@@ -1,5 +1,6 @@
 const express = require('express');
 const https = require('https');
+const fs = require('fs');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -8,8 +9,27 @@ const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
 const PHONE_NUMBER_ID = process.env.PHONE_NUMBER_ID;
 const VERIFY_TOKEN = "dollarskill123";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "dollarskill999";
-const leads = {};
-const conversations = {};
+
+const DATA_FILE = '/tmp/leads.json';
+
+function loadData() {
+  try {
+    if (fs.existsSync(DATA_FILE)) {
+      return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+    }
+  } catch (e) { console.error('Load error:', e); }
+  return { leads: {}, conversations: {} };
+}
+
+function saveData() {
+  try {
+    fs.writeFileSync(DATA_FILE, JSON.stringify({ leads, conversations }));
+  } catch (e) { console.error('Save error:', e); }
+}
+
+const data = loadData();
+const leads = data.leads;
+const conversations = data.conversations;
 
 const VOICE_NOTE_URL = 'https://res.cloudinary.com/dpknwoywz/video/upload/v1780175029/voicenote.m4a_myqyex.m4a';
 const PHOTO1_URL = 'https://res.cloudinary.com/dpknwoywz/image/upload/v1780173251/photo_2026-05-30_15-07-57_yznnlq.jpg';
@@ -34,9 +54,9 @@ function sendRequest(path, data) {
       }
     };
     const req = https.request(options, (res) => {
-      let data = '';
-      res.on('data', chunk => data += chunk);
-      res.on('end', () => { console.log('API response:', data); resolve(data); });
+      let d = '';
+      res.on('data', chunk => d += chunk);
+      res.on('end', () => { console.log('API response:', d); resolve(d); });
     });
     req.on('error', (e) => { console.error('Request error:', e); reject(e); });
     req.write(body);
@@ -48,6 +68,7 @@ function sendText(to, message) {
   console.log('Sending text to:', to);
   if (!conversations[to]) conversations[to] = [];
   conversations[to].push({ from: 'bot', text: message, time: new Date().toISOString() });
+  saveData();
   return sendRequest(`/v19.0/${PHONE_NUMBER_ID}/messages`, {
     messaging_product: 'whatsapp',
     to,
@@ -59,6 +80,7 @@ function sendText(to, message) {
 function sendImage(to, url) {
   if (!conversations[to]) conversations[to] = [];
   conversations[to].push({ from: 'bot', text: '[Image]', time: new Date().toISOString() });
+  saveData();
   return sendRequest(`/v19.0/${PHONE_NUMBER_ID}/messages`, {
     messaging_product: 'whatsapp',
     to,
@@ -70,6 +92,7 @@ function sendImage(to, url) {
 function sendAudio(to, url) {
   if (!conversations[to]) conversations[to] = [];
   conversations[to].push({ from: 'bot', text: '[Voice Note]', time: new Date().toISOString() });
+  saveData();
   return sendRequest(`/v19.0/${PHONE_NUMBER_ID}/messages`, {
     messaging_product: 'whatsapp',
     to,
@@ -81,6 +104,7 @@ function sendAudio(to, url) {
 function sendVideo(to, url) {
   if (!conversations[to]) conversations[to] = [];
   conversations[to].push({ from: 'bot', text: '[Video]', time: new Date().toISOString() });
+  saveData();
   return sendRequest(`/v19.0/${PHONE_NUMBER_ID}/messages`, {
     messaging_product: 'whatsapp',
     to,
@@ -97,7 +121,10 @@ async function sendPitch(phone) {
   await sendText(phone, "You're already ahead of 90% of people trying to make money online. You have everything you need to start seeing results within days.\n\nAND I know what you're thinking, 'this won't work for me', 'I've tried a lot, wasting my time again would suck'. That's exactly what I thought too. Until I actually started. Now I'm just coming back from a trip like I told you 🙂‍↔️\n\nFor N50,000, you get the kind of income that lets you travel, pay rent without thinking twice, take care of your family without stress. Results within days to weeks if you implement. An active community to ginger you to get your bag. And a 30-day money back guarantee. I will personally apologise publicly for wasting your time if you implement everything and still don't change your income drastically 🙂‍↔️\n\nYou're the only one that can stop yourself.\n\nLike I said we don't want this to cast and 73 people already got inside. Price moves to N150,000 at 100.\nhttps://app.expertnaire.com/product/8646634117/8478632445");
   await delay(10000);
   await sendText(phone, "Any questions before you get your big bag?");
-  if (leads[phone]) leads[phone].sequenceDone = true;
+  if (leads[phone]) {
+    leads[phone].sequenceDone = true;
+    saveData();
+  }
 }
 
 async function runSequence(phone) {
@@ -118,13 +145,17 @@ async function runSequence(phone) {
   await delay(20000);
   await sendText(phone, "Daniel and I recorded a quick video about exactly how this blueprint will be printing your lifestyle every single day showing you how it's set up 🙂‍↔️ The first 5 minutes alone will show you why this is completely different. Should I send it over to you now?");
 
-  leads[phone].stage = 'waiting_for_permission';
+  if (leads[phone]) {
+    leads[phone].stage = 'waiting_for_permission';
+    saveData();
+  }
 
-  // 25 min fallback - fires pitch if no response
+  // 25 min fallback
   await delay(1500000);
 
   if (leads[phone] && leads[phone].stage === 'waiting_for_permission') {
     leads[phone].stage = 'pitch_sent';
+    saveData();
     await sendPitch(phone);
   }
 
@@ -142,6 +173,7 @@ async function runSequence(phone) {
   }
 
   delete leads[phone];
+  saveData();
 }
 
 // Admin panel
@@ -234,10 +266,12 @@ app.post('/webhook', async (req, res) => {
 
     if (!conversations[phone]) conversations[phone] = [];
     conversations[phone].push({ from: 'customer', text: message.text?.body || '[media]', time: new Date().toISOString() });
+    saveData();
 
     // New lead
     if (!leads[phone]) {
       leads[phone] = { stage: 'welcomed', bought: false };
+      saveData();
       await delay(15000);
       await sendText(phone, "Heyy, welcome to the inner circle🦅. You're here so it means you're serious. Let's get into it, what's your name?");
       return;
@@ -247,6 +281,7 @@ app.post('/webhook', async (req, res) => {
     if (leads[phone].stage === 'welcomed' && !leads[phone].sequenceStarted) {
       leads[phone].stage = 'sequence';
       leads[phone].sequenceStarted = true;
+      saveData();
       runSequence(phone);
       return;
     }
@@ -256,6 +291,7 @@ app.post('/webhook', async (req, res) => {
       const positive = ["yes", "yh", "yeah", "sure", "ok", "okay", "yep", "yup", "y", "send", "go ahead", "please", "definitely", "absolutely", "of course", "why not", "lets go", "let's go", "sounds good"];
       if (positive.some(w => text.includes(w))) {
         leads[phone].stage = 'video_sent';
+        saveData();
         await delay(10000);
         await sendText(phone, "Okay take your time to digest it. Your journey starts here: " + YOUTUBE_URL + "\n\nReply 'Done' once you've finished watching so I can show you how to get set up 🦅");
       }
@@ -266,15 +302,17 @@ app.post('/webhook', async (req, res) => {
     if (leads[phone].stage === 'video_sent') {
       if (text.includes('done')) {
         leads[phone].stage = 'asked_about_video';
+        saveData();
         await delay(20000);
         await sendText(phone, "That video breaks down exactly how we're hitting these numbers every single month. Does it look like something you would comfortably plug into your daily routine?");
       }
       return;
     }
 
-    // Any reply to "does it look like something you'd plug in" fires pitch
+    // Any reply fires pitch
     if (leads[phone].stage === 'asked_about_video') {
       leads[phone].stage = 'pitch_sent';
+      saveData();
       await sendPitch(phone);
       return;
     }
