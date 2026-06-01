@@ -159,7 +159,7 @@ const QUICK_REPLIES = [
   { label: 'What is this about?', text: 'Just watch the first 5 minutes of this video, it explains everything better than I can. https://sweet-growth-production-9b60.up.railway.app/watch' },
   { label: 'Resend VSL', text: 'No worries at all! Here it is again: https://sweet-growth-production-9b60.up.railway.app/watch. Take your time with it, reply Done when you are finished 🦅' },
   { label: 'MSG 3: tried before?', text: 'Okay real talk, I was just going to send this to everyone who messaged but I actually care about helping every single person actually print dollars everyday, not just sending stuff. Have you tried making money online before or is this your first time exploring it?' },
-  { label: 'MSG 4: send breakdown?', text: 'I have a breakdown video of everything you need to know. Dan in our inner circle made it easy to grasp and the first 5 minutes alone will show you why this is different from probably everything you have tried before. Would you like me to send it?' },
+  { label: 'MSG 4: send breakdown?', text: 'Oh okay okay this is perfect for you. I have a breakdown video of everything you need to know. Dan in our inner circle made it easy to grasp and the first 5 minutes alone will show you why this is different from probably everything you have tried before. Would you like me to send it?' },
   { label: 'MSG 5: VSL link', text: 'Take your time with it. https://sweet-growth-production-9b60.up.railway.app/watch. You reached out because you know your current situation needs a change. This breakdown is the bridge to that new era 🦅 Reply Done when you are finished and I will help you get set up.' },
   { label: 'MSG 6: kudos', text: 'Okayy okay that\'s good, kudos to you 🦅. That video is the exact system of how we are hitting these numbers every single month. Does it look like something you would comfortably plug into your daily routine or would it be a struggle for you?' },
   { label: 'MSG 8: affiliate link', text: 'Since we\'ve covered the mechanics, you can jump in here: ' + AFFILIATE_URL + '. Once you\'re in, take a look at the latest reviews from the community. See you there!' },
@@ -473,9 +473,7 @@ app.get('/admin', (req, res) => {
           <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="review_video"/><button type="submit" class="btn-orange">🎥 Review Vid</button></form>
           <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="review_pic1"/><button type="submit" class="btn-orange">📸 Review Pic 1</button></form>
           <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="review_pic2"/><button type="submit" class="btn-orange">📸 Review Pic 2</button></form>
-          <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="review_vid"/><button type="submit" class="btn-orange">🎥 Review Vid</button></form>
-          <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="review_pic1"/><button type="submit" class="btn-orange">📸 Review 1</button></form>
-          <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="review_pic2"/><button type="submit" class="btn-orange">📸 Review 2</button></form>
+
         </div>
         <div class="divider"></div>
         <div class="name-edit">
@@ -937,7 +935,7 @@ app.post('/webhook', async (req, res) => {
     if (leads[phone].stage === 'waiting_pain_point') {
       leads[phone].stage = 'waiting_permission'; saveDataFull();
       await delay(20000);
-      await sendText(phone, "I have a breakdown video of everything you need to know. Dan in our inner circle made it easy to grasp and the first 5 minutes alone will show you why this is different from probably everything you've tried before. Would you like me to send it?");
+      await sendText(phone, "Oh okay okay this is perfect for you. I have a breakdown video of everything you need to know. Dan in our inner circle made it easy to grasp and the first 5 minutes alone will show you why this is different from probably everything you have tried before. Would you like me to send it?");
       return;
     }
 
