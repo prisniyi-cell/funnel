@@ -121,6 +121,9 @@ function saveDataFull() {
   saveCloud();
 }
 
+const REVIEW_VIDEO_URL = 'https://res.cloudinary.com/dpknwoywz/video/upload/v1780173788/video_2026-05-30_15-12-27_t9aoqf.mp4';
+const REVIEW_PIC1_URL = 'https://res.cloudinary.com/dpknwoywz/image/upload/v1780173251/photo_2026-05-30_15-07-57_yznnlq.jpg';
+const REVIEW_PIC2_URL = 'https://res.cloudinary.com/dpknwoywz/image/upload/v1780173238/photo_2026-05-30_15-10-04_m6fkek.jpg';
 const VOICE_NOTE_URL = 'https://res.cloudinary.com/dpknwoywz/video/upload/v1780175029/voicenote.m4a_myqyex.m4a';
 const PRICE_VN_URL = 'https://res.cloudinary.com/dpknwoywz/video/upload/v1780247025/Vaurie_second_vn_kz13gy.m4a';
 const OBJECTION_URL = 'https://res.cloudinary.com/dpknwoywz/image/upload/v1780176996/photo_2026-05-30_15-09-09_lnzooq.jpg';
@@ -145,19 +148,19 @@ function getStageDisplay(stage) {
 }
 
 const QUICK_REPLIES = [
-  { label: 'Is this legit?', text: '' },
-  { label: 'How much? (early)', text: 'Just watch the breakdown first, it covers everything including what you get and what it costs. Here it is: ' + YOUTUBE_URL },
+  { label: 'Is this legit?', text: 'I could send you hundreds of reviews but you won\'t be able to see them all 🙂\u200d↔️🦅' },
+  { label: 'How much? (early)', text: 'Just watch the breakdown first, it covers everything including what you get and what it costs. Here it is: https://sweet-growth-production-9b60.up.railway.app/watch' },
   { label: 'No money now', text: 'Totally understand. When you\'re ready the link is here. Price is still N50,000 for now.' },
-  { label: 'Does it work?', text: '' },
+  { label: 'Does it work?', text: 'I could send you hundreds of reviews but you won\'t be able to see them all 🙂\u200d↔️🦅' },
   { label: 'Do I have to pay?', text: 'Yes, it\'s a one-time N50,000 directly on the platform, no hidden fees, nothing extra. You pay once and you\'re in. Want me to send the link now?' },
   { label: 'I\'ll think about it', text: 'Okay that\'s totally fine, take your time. I just wanted to give you a heads-up that the early-bird pricing is tied to the first 100 spots, and it\'s jumping to N150k soon. I\'d hate for you to have to pay the higher fee if you decide to jump in later.' },
   { label: 'Installments?', text: 'The system is a one-time N50,000, no installments. But honestly that\'s the point, one payment, then it pays you back multiplied. When you\'re ready the link is here.' },
-  { label: 'Tried before', text: 'Same thing I thought. That\'s exactly why I almost didn\'t share this. Just watch the first 5 minutes. ' + YOUTUBE_URL },
-  { label: 'What is this about?', text: 'Just watch the first 5 minutes of this video, it explains everything better than I can. ' + YOUTUBE_URL },
-  { label: 'Resend VSL', text: 'No worries at all! Here it is again: ' + YOUTUBE_URL + ', take your time with it, reply Done when you\'re finished 🦅' },
+  { label: 'Tried before', text: 'Same thing I thought. That\'s exactly why I almost didn\'t share this. Just watch the first 5 minutes. https://sweet-growth-production-9b60.up.railway.app/watch' },
+  { label: 'What is this about?', text: 'Just watch the first 5 minutes of this video, it explains everything better than I can. https://sweet-growth-production-9b60.up.railway.app/watch' },
+  { label: 'Resend VSL', text: 'No worries at all! Here it is again: https://sweet-growth-production-9b60.up.railway.app/watch. Take your time with it, reply Done when you are finished 🦅' },
   { label: 'MSG 3: tried before?', text: 'Okay real talk, I was just going to send this to everyone who messaged but I actually care about helping every single person actually print dollars everyday, not just sending stuff. Have you tried making money online before or is this your first time exploring it?' },
-  { label: 'MSG 4: send breakdown?', text: 'I have a breakdown, the first 5 minutes alone will show you why this is different from probably everything you\'ve tried before. Would you like me to send it?' },
-  { label: 'MSG 5: VSL link', text: 'Take your time with it. ' + YOUTUBE_URL + '. You reached out because you know your current situation needs a change. This breakdown is the bridge to that new era 🦅 Reply \'Done\' when you\'re finished and I\'ll help you get set up.' },
+  { label: 'MSG 4: send breakdown?', text: 'I have a breakdown video of everything you need to know. Dan in our inner circle made it easy to grasp and the first 5 minutes alone will show you why this is different from probably everything you have tried before. Would you like me to send it?' },
+  { label: 'MSG 5: VSL link', text: 'Take your time with it. https://sweet-growth-production-9b60.up.railway.app/watch. You reached out because you know your current situation needs a change. This breakdown is the bridge to that new era 🦅 Reply Done when you are finished and I will help you get set up.' },
   { label: 'MSG 6: kudos', text: 'Okayy okay that\'s good, kudos to you 🦅. That video is the exact system of how we are hitting these numbers every single month. Does it look like something you would comfortably plug into your daily routine or would it be a struggle for you?' },
   { label: 'MSG 8: affiliate link', text: 'Since we\'ve covered the mechanics, you can jump in here: ' + AFFILIATE_URL + '. Once you\'re in, take a look at the latest reviews from the community. See you there!' },
   { label: 'MSG 9: any questions?', text: 'Any questions before you get your big bag?' },
@@ -467,6 +470,9 @@ app.get('/admin', (req, res) => {
           <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="price_vn"/><button type="submit" class="btn-orange">🎙 Price VN</button></form>
           <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="objection"/><button type="submit" class="btn-orange">📸 Objection</button></form>
           <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="testimonial"/><button type="submit" class="btn-orange">🎥 Testimonial</button></form>
+          <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="review_vid"/><button type="submit" class="btn-orange">🎥 Review Vid</button></form>
+          <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="review_pic1"/><button type="submit" class="btn-orange">📸 Review 1</button></form>
+          <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="review_pic2"/><button type="submit" class="btn-orange">📸 Review 2</button></form>
         </div>
         <div class="divider"></div>
         <div class="name-edit">
@@ -556,6 +562,9 @@ app.post('/admin/sendmedia', async (req, res) => {
     else if (media === 'price_vn') await sendAudio(phone, PRICE_VN_URL);
     else if (media === 'objection') await sendImage(phone, OBJECTION_URL);
     else if (media === 'testimonial') await sendVideo(phone, TESTIMONIAL_48HR_URL);
+    else if (media === 'review_vid') await sendVideo(phone, REVIEW_VIDEO_URL);
+    else if (media === 'review_pic1') await sendImage(phone, REVIEW_PIC1_URL);
+    else if (media === 'review_pic2') await sendImage(phone, REVIEW_PIC2_URL);
     markRead(phone);
   }
   res.redirect(`/admin?pass=${pass}`);
