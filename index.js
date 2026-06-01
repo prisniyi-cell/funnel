@@ -470,6 +470,9 @@ app.get('/admin', (req, res) => {
           <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="price_vn"/><button type="submit" class="btn-orange">🎙 Price VN</button></form>
           <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="objection"/><button type="submit" class="btn-orange">📸 Objection</button></form>
           <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="testimonial"/><button type="submit" class="btn-orange">🎥 Testimonial</button></form>
+          <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="review_video"/><button type="submit" class="btn-orange">🎥 Review Vid</button></form>
+          <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="review_pic1"/><button type="submit" class="btn-orange">📸 Review Pic 1</button></form>
+          <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="review_pic2"/><button type="submit" class="btn-orange">📸 Review Pic 2</button></form>
           <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="review_vid"/><button type="submit" class="btn-orange">🎥 Review Vid</button></form>
           <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="review_pic1"/><button type="submit" class="btn-orange">📸 Review 1</button></form>
           <form action="/admin/sendmedia" method="post" style="display:inline"><input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/><input type="hidden" name="media" value="review_pic2"/><button type="submit" class="btn-orange">📸 Review 2</button></form>
@@ -562,6 +565,9 @@ app.post('/admin/sendmedia', async (req, res) => {
     else if (media === 'price_vn') await sendAudio(phone, PRICE_VN_URL);
     else if (media === 'objection') await sendImage(phone, OBJECTION_URL);
     else if (media === 'testimonial') await sendVideo(phone, TESTIMONIAL_48HR_URL);
+    else if (media === 'review_video') await sendVideo(phone, REVIEW_VIDEO_URL);
+    else if (media === 'review_pic1') await sendImage(phone, REVIEW_PIC1_URL);
+    else if (media === 'review_pic2') await sendImage(phone, REVIEW_PIC2_URL);
     else if (media === 'review_vid') await sendVideo(phone, REVIEW_VIDEO_URL);
     else if (media === 'review_pic1') await sendImage(phone, REVIEW_PIC1_URL);
     else if (media === 'review_pic2') await sendImage(phone, REVIEW_PIC2_URL);
