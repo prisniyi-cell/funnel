@@ -155,7 +155,7 @@ const QUICK_REPLIES = [
   { label: 'Tried before', text: 'Same thing I thought. That\'s exactly why I almost didn\'t share this. Just watch the first 5 minutes. ' + YOUTUBE_URL },
   { label: 'What is this about?', text: 'Just watch the first 5 minutes of this video, it explains everything better than I can. ' + YOUTUBE_URL },
   { label: 'Resend VSL', text: 'No worries at all! Here it is again: ' + YOUTUBE_URL + ', take your time with it, reply Done when you\'re finished 🦅' },
-  { label: 'MSG 3: tried before?', text: 'Okay real talk, I was just going to send this to everyone who messaged but I actually care about helping every single person actually print dollars everyday, not just sending links. Have you tried making money online before or is this your first time exploring it?' },
+  { label: 'MSG 3: tried before?', text: 'Okay real talk, I was just going to send this to everyone who messaged but I actually care about helping every single person actually print dollars everyday, not just sending stuff. Have you tried making money online before or is this your first time exploring it?' },
   { label: 'MSG 4: send breakdown?', text: 'I have a breakdown, the first 5 minutes alone will show you why this is different from probably everything you\'ve tried before. Would you like me to send it?' },
   { label: 'MSG 5: VSL link', text: 'Take your time with it. ' + YOUTUBE_URL + '. You reached out because you know your current situation needs a change. This breakdown is the bridge to that new era 🦅 Reply \'Done\' when you\'re finished and I\'ll help you get set up.' },
   { label: 'MSG 6: kudos', text: 'Kudos to you 🦅. That video is the exact system of how we\'re hitting these numbers every single month. Does it look like something you would comfortably plug into your daily routine or would it be a struggle for you?' },
@@ -857,21 +857,21 @@ app.get('/watch', (req, res) => {
       <div class="proof-item">
         <p>Never thought I could earn in dollars from Nigeria. This changed everything for me and my family.</p>
         <div class="proof-author">
-          <img src="https://res.cloudinary.com/dpknwoywz/image/upload/v1780321626/IMG_4131_w5aw6y.png" class="proof-avatar" alt="Funmi"/>
+          <img src="https://res.cloudinary.com/dpknwoywz/image/upload/w_200,h_200,c_fill,g_face/v1780321626/IMG_4131_w5aw6y.png" class="proof-avatar" alt="Funmi"/>
           <span class="proof-name" style="margin:0;padding:0">Funmi, 31</span>
         </div>
       </div>
       <div class="proof-item">
         <p>Omo I was skeptical at first but within 5 days of implementing what I learned I made my first dollar online. This is real.</p>
         <div class="proof-author">
-          <img src="https://res.cloudinary.com/dpknwoywz/image/upload/v1780321590/IMG_4130_dyxz2s.png" class="proof-avatar" alt="Daniel"/>
+          <img src="https://res.cloudinary.com/dpknwoywz/image/upload/w_200,h_200,c_fill,g_face/v1780321590/IMG_4130_dyxz2s.png" class="proof-avatar" alt="Daniel"/>
           <span class="proof-name" style="margin:0;padding:0">Daniel, 28</span>
         </div>
       </div>
       <div class="proof-item">
         <p>The system is simple and it actually works. I was doing it wrong before, I was frustrated with all other dollar income streams I had tried. But now I know exactly what to do every day.</p>
         <div class="proof-author">
-          <img src="https://res.cloudinary.com/dpknwoywz/image/upload/v1780321585/IMG_4128_gvxosk.png" class="proof-avatar" alt="Gumar"/>
+          <img src="https://res.cloudinary.com/dpknwoywz/image/upload/w_200,h_200,c_fill,g_face/v1780321585/IMG_4128_gvxosk.png" class="proof-avatar" alt="Gumar"/>
           <span class="proof-name" style="margin:0;padding:0">Gumar, 24</span>
         </div>
       </div>
@@ -944,7 +944,7 @@ app.post('/webhook', async (req, res) => {
       if (text.includes('done')) {
         leads[phone].stage = 'waiting_plug_reply'; saveDataFull();
         await delay(20000);
-        await sendText(phone, "Kudos to you 🦅. That video is the exact system of how we're hitting these numbers every single month. Does it look like something you would comfortably plug into your daily routine or would it be a struggle for you?");
+        await sendText(phone, "Okayy okay that's good, kudos to you 🦅. That video is the exact system of how we are hitting these numbers every single month. Does it look like something you would comfortably plug into your daily routine or would it be a struggle for you?");
       }
       return;
     }
