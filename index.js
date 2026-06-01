@@ -67,7 +67,6 @@ async function loadCloud() {
 function saveData() { saveLocal(); saveCloud(); }
 
 const SEED_LEADS = {
-  '2348084700797': { stage: 'done_followup', bought: false, seeded: true },
   '2349015724123': { stage: 'done_followup', bought: false, seeded: true },
   '2349018047060': { stage: 'done_followup', bought: false, seeded: true },
   '2348059980894': { stage: 'done_followup', bought: false, seeded: true },
@@ -101,6 +100,16 @@ async function init() {
     if (!leads[phone]) {
       leads[phone] = data;
       if (!conversations[phone]) conversations[phone] = [{ from: 'bot', text: '[Old lead, restored]', time: new Date().toISOString() }];
+    }
+  }
+  // Mark all existing cooled off leads as read so no blue dots on fresh start
+  for (const phone of Object.keys(leads)) {
+    if (leads[phone]?.stage === 'done_followup') {
+      const msgs = conversations[phone] || [];
+      const customerMsgs = msgs.filter(m => m.from === 'customer');
+      if (!lastSeen[phone + '_customer']) {
+        lastSeen[phone + '_customer'] = customerMsgs.length;
+      }
     }
   }
   saveData();
@@ -383,6 +392,7 @@ app.get('/admin', (req, res) => {
     <div class="stat"><div class="stat-num" style="color:#dc2626">${(stageCounts['pitch_sent']||0)+(stageCounts['waiting_done']||0)}</div><div class="stat-label">🔴 Urgent</div></div>
     <div class="stat"><div class="stat-num" style="color:#22c55e">${stageCounts['waiting_plug_reply']||0}</div><div class="stat-label">🟢 HOT</div></div>
     <div class="stat"><div class="stat-num">${allPhones.length}</div><div class="stat-label">Total</div></div>
+    <div class="stat"><div class="stat-num" style="color:#87ceeb">${Object.keys(conversations).filter(p => hasUnread(p)).length}</div><div class="stat-label">Unread</div></div>
   </div>`;
 
   // Funnel analytics
@@ -835,11 +845,9 @@ app.get('/watch', (req, res) => {
     <p class="subline">Watch the full breakdown below. The part that changes everything is in the first few minutes.</p>
 
     <div class="video-wrap">
-      <iframe
-        src="https://www.youtube.com/embed/aGwB50peA6g?rel=0&modestbranding=1&playsinline=1"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen>
-      </iframe>
+      <video controls playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+        <source src="https://res.cloudinary.com/dpknwoywz/video/upload/v1780326254/YTDown_YouTube_YOUTUBE-INCOME-GENERATOR-Make-Money-From_Media_aGwB50peA6g_002_720p_egaf6k.mp4" type="video/mp4"/>
+      </video>
     </div>
 
     <div class="divider"></div>
@@ -914,7 +922,7 @@ app.post('/webhook', async (req, res) => {
     if (leads[phone].stage === 'waiting_pain_point') {
       leads[phone].stage = 'waiting_permission'; saveDataFull();
       await delay(20000);
-      await sendText(phone, "I have a breakdown, the first 5 minutes alone will show you why this is different from probably everything you've tried before. Would you like me to send it?");
+      await sendText(phone, "I have a breakdown video of everything you need to know. Dan in our inner circle made it easy to grasp and the first 5 minutes alone will show you why this is different from probably everything you've tried before. Would you like me to send it?");
       return;
     }
 
@@ -923,7 +931,7 @@ app.post('/webhook', async (req, res) => {
       if (positive.some(w => text.includes(w))) {
         leads[phone].stage = 'waiting_done'; saveDataFull();
         await delay(20000);
-        await sendText(phone, "Take your time with it. https://sweet-growth-production-9b60.up.railway.app/watch -- You reached out because you know your current situation needs a change. This breakdown is the bridge to that new era 🦅 Reply 'Done' when you're finished and I'll help you get set up.");
+        await sendText(phone, "Take your time with it. https://sweet-growth-production-9b60.up.railway.app/watch. You reached out because you know your current situation needs a change. This breakdown is the bridge to that new era 🦅 Reply Done when you are finished and I will help you get set up.");
         await delay(21600000);
         if (leads[phone] && leads[phone].stage === 'waiting_done') {
           await sendText(phone, "You went ghost on me 👀 everything good? Did the link work? 👀");
@@ -948,10 +956,12 @@ app.post('/webhook', async (req, res) => {
       await delay(10000);
       await sendText(phone, "Since we've covered the mechanics, you can jump in here: " + AFFILIATE_URL + ". Once you're in, take a look at the latest reviews from the community. See you there!");
       await delay(10000);
+      await sendImage(phone, "https://res.cloudinary.com/dpknwoywz/image/upload/v1780325806/copy_7250D24B-0EB4-4168-A773-6679AB8FC04B_y4mizn.jpg");
+      await delay(10000);
       await sendText(phone, "Any questions before you get your big bag?");
       await delay(86400000);
       if (leads[phone] && !leads[phone].bought) {
-        await sendText(phone, "Someone just asked me if this works if you've never made money online before. Thought you'd want to see what I showed them my boss.");
+        await sendText(phone, "Someone just asked me if this works if you have never made money online before. Thought you would want to see what I showed them.");
         await sendImage(phone, OBJECTION_URL);
       }
       await delay(86400000);
