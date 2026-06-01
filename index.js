@@ -847,17 +847,17 @@ app.get('/watch', (req, res) => {
     <div class="proof">
       <div class="proof-title">What people are saying</div>
       <div class="proof-item">
-        <p>Omo I was skeptical at first but within 5 days of implementing what I learned I made my first dollar online. This is real.</p>
-        <div class="proof-author">
-          <img src="https://res.cloudinary.com/dpknwoywz/image/upload/v1780321590/IMG_4130_dyxz2s.png" class="proof-avatar" alt="Daniel"/>
-          <span class="proof-name" style="margin:0;padding:0">Daniel, 28</span>
-        </div>
-      </div>
-      <div class="proof-item">
         <p>Never thought I could earn in dollars from Nigeria. This changed everything for me and my family.</p>
         <div class="proof-author">
           <img src="https://res.cloudinary.com/dpknwoywz/image/upload/v1780321626/IMG_4131_w5aw6y.png" class="proof-avatar" alt="Funmi"/>
           <span class="proof-name" style="margin:0;padding:0">Funmi, 31</span>
+        </div>
+      </div>
+      <div class="proof-item">
+        <p>Omo I was skeptical at first but within 5 days of implementing what I learned I made my first dollar online. This is real.</p>
+        <div class="proof-author">
+          <img src="https://res.cloudinary.com/dpknwoywz/image/upload/v1780321590/IMG_4130_dyxz2s.png" class="proof-avatar" alt="Daniel"/>
+          <span class="proof-name" style="margin:0;padding:0">Daniel, 28</span>
         </div>
       </div>
       <div class="proof-item">
