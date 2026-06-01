@@ -317,6 +317,7 @@ app.get('/admin', (req, res) => {
     .cooled-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:4px 0}
     .cooled-section{margin-top:4px}
   </style>
+  <meta http-equiv="refresh" content="30">
   <script>
     const quickReplies = ${quickReplyJS};
     function toggleManage(id) {
@@ -352,6 +353,11 @@ app.get('/admin', (req, res) => {
     function markRead(phone, pass) {
       fetch('/admin/markread?pass=' + pass + '&phone=' + phone);
     }
+    function markReadClient(phone, pass, cardId) {
+      fetch('/admin/markread?pass=' + pass + '&phone=' + phone);
+      const dot = document.querySelector('#card-' + cardId + ' .unread-dot');
+      if (dot) dot.style.display = 'none';
+    }
   </script>
   </head><body>`;
 
@@ -386,13 +392,13 @@ app.get('/admin', (req, res) => {
 
     return `<div class="card" id="card-${cardId}">
       <div class="card-top">
-        ${unread ? `<div class="unread-dot"></div>` : '<div style="width:8px"></div>'}
+        ${unread ? `<div class="unread-dot" onclick="markReadClient('${phone}', '${pass}', '${cardId}')" style="cursor:pointer" title="Mark as read"></div>` : '<div style="width:8px"></div>'}
         <div class="phone">+${phone}</div>
       </div>
       ${name ? `<div class="name-display">👤 ${name}</div>` : ''}
       <span class="stage-badge" style="background:${si.color};color:${si.text}">${si.label}</span>
       <div class="msgs">${msgs.map(m=>`<div class="msg-${m.from}"><span class="bubble bubble-${m.from}">${m.text}</span><div class="time">${new Date(m.time).toLocaleTimeString()}</div></div>`).join('')}</div>
-      <button class="manage-btn" onclick="toggleManage('${cardId}'); markRead('${phone}', '${pass}')">Manage</button>
+      <button class="manage-btn" onclick="toggleManage('${cardId}')">Manage</button>
       <div class="manage-panel" id="manage-${cardId}">
         <form action="/admin/reply" method="post">
           <input type="hidden" name="pass" value="${pass}"/><input type="hidden" name="phone" value="${phone}"/>
