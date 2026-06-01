@@ -553,6 +553,310 @@ app.post('/admin/sendmedia', async (req, res) => {
 
 app.get('/', (req, res) => res.send('Funnel running'));
 
+app.get('/watch', (req, res) => {
+  res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Dollar Skill</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8CC7A;
+      --dark: #0A0A0A;
+      --dark-2: #111111;
+      --dark-3: #1A1A1A;
+      --text: #F0EDE6;
+      --text-muted: #888;
+    }
+
+    html, body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Eagle badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .headline {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(26px, 6vw, 42px);
+      font-weight: 800;
+      line-height: 1.15;
+      text-align: center;
+      margin-bottom: 12px;
+      animation: fadeUp 0.7s ease 0.1s both;
+    }
+
+    .headline span {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subline {
+      font-size: 15px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 36px;
+      line-height: 1.6;
+      max-width: 500px;
+      animation: fadeUp 0.7s ease 0.2s both;
+    }
+
+    /* Video wrapper */
+    .video-wrap {
+      width: 100%;
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--dark-3);
+      box-shadow: 0 0 0 1px rgba(201,168,76,0.15), 0 40px 80px rgba(0,0,0,0.6);
+      animation: fadeUp 0.8s ease 0.3s both;
+      margin-bottom: 36px;
+    }
+
+    .video-wrap::before {
+      content: '';
+      display: block;
+      padding-top: 56.25%;
+    }
+
+    .video-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Glow line under video */
+    .video-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    /* CTA */
+    .cta-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      animation: fadeUp 0.8s ease 0.5s both;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .cta-btn {
+      display: block;
+      width: 100%;
+      padding: 18px 32px;
+      background: linear-gradient(135deg, #C9A84C 0%, #E8CC7A 50%, #C9A84C 100%);
+      background-size: 200% 100%;
+      color: #0A0A0A;
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 12px;
+      letter-spacing: 0.01em;
+      transition: background-position 0.4s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 8px 32px rgba(201,168,76,0.3);
+      cursor: pointer;
+      border: none;
+    }
+
+    .cta-btn:hover {
+      background-position: 100% 0;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(201,168,76,0.45);
+    }
+
+    .cta-btn:active {
+      transform: translateY(0);
+    }
+
+    .cta-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* Divider */
+    .divider {
+      width: 100%;
+      max-width: 420px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      margin: 40px 0 32px;
+    }
+
+    /* Social proof */
+    .proof {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+      max-width: 520px;
+      animation: fadeUp 0.8s ease 0.6s both;
+    }
+
+    .proof-item {
+      background: var(--dark-2);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 16px 18px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #ccc;
+      position: relative;
+    }
+
+    .proof-item::before {
+      content: '"';
+      font-family: 'Syne', sans-serif;
+      font-size: 40px;
+      color: var(--gold);
+      opacity: 0.4;
+      position: absolute;
+      top: 8px;
+      left: 14px;
+      line-height: 1;
+    }
+
+    .proof-item p {
+      padding-left: 24px;
+    }
+
+    .proof-name {
+      margin-top: 8px;
+      padding-left: 24px;
+      font-size: 12px;
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    .proof-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 28px 16px 48px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="badge">🦅 For serious people only</div>
+
+    <h1 class="headline">
+      The exact system Nigerians are using to<br/>
+      <span>print dollars daily</span>
+    </h1>
+
+    <p class="subline">Watch the full breakdown below. The part that changes everything is in the first few minutes.</p>
+
+    <div class="video-wrap">
+      <iframe
+        src="https://www.youtube.com/embed/aGwB50peA6g?si=v9ejB0Mbd_NdzdGD&rel=0&modestbranding=1&iv_load_policy=3&color=white"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <div class="cta-wrap">
+      <a href="https://app.expertnaire.com/product/8646634117/8478632445" class="cta-btn" target="_blank">
+        I'm ready to start printing 🦅
+      </a>
+      <p class="cta-note">One-time payment &middot; Direct access &middot; Start today</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="proof">
+      <div class="proof-title">What people are saying</div>
+      <div class="proof-item">
+        <p>I was skeptical at first but within 48 hours of implementing what I learned I made my first dollar online. This is real.</p>
+        <div class="proof-name">— Community member</div>
+      </div>
+      <div class="proof-item">
+        <p>Never thought I could earn in dollars from Nigeria. This changed everything for me and my family.</p>
+        <div class="proof-name">— Community member</div>
+      </div>
+      <div class="proof-item">
+        <p>The system is simple and it actually works. I was doing it wrong before. Now I know exactly what to do every day.</p>
+        <div class="proof-name">— Community member</div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>`);
+});
+
 app.get('/webhook', (req, res) => {
   const { 'hub.mode': mode, 'hub.verify_token': token, 'hub.challenge': challenge } = req.query;
   if (mode && token === VERIFY_TOKEN) res.status(200).send(challenge);
@@ -602,7 +906,7 @@ app.post('/webhook', async (req, res) => {
       if (positive.some(w => text.includes(w))) {
         leads[phone].stage = 'waiting_done'; saveDataFull();
         await delay(20000);
-        await sendText(phone, "Take your time with it. " + YOUTUBE_URL + ". You reached out because you know your current situation needs a change. This breakdown is the bridge to that new era 🦅 Reply 'Done' when you're finished and I'll help you get set up.");
+        await sendText(phone, "Take your time with it. https://sweet-growth-production-9b60.up.railway.app/watch — You reached out because you know your current situation needs a change. This breakdown is the bridge to that new era 🦅 Reply 'Done' when you're finished and I'll help you get set up.");
         await delay(21600000);
         if (leads[phone] && leads[phone].stage === 'waiting_done') {
           await sendText(phone, "You went ghost on me 👀 everything good? Did the link work? 👀");
