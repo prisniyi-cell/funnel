@@ -329,13 +329,20 @@ app.get('/admin', (req, res) => {
     }
     function fillReply(id, text) {
       const input = document.getElementById('reply-' + id);
-      if (input) {
-        input.value = text.replace(/\\n/g, '\n');
-        input.focus();
-      }
+      if (input) { input.value = text; input.focus(); }
       const panel = document.getElementById('quick-' + id);
       if (panel) panel.style.display = 'none';
     }
+    document.addEventListener('click', function(e) {
+      if (e.target && e.target.classList.contains('quick-btn')) {
+        const idx = e.target.getAttribute('data-idx');
+        const cardId = e.target.getAttribute('data-cardid');
+        if (idx !== null && cardId) {
+          const q = quickReplies[parseInt(idx)];
+          if (q) fillReply(cardId, q.text);
+        }
+      }
+    });
     function toggleCooled() {
       const s = document.getElementById('cooled-body');
       const arrow = document.getElementById('cooled-arrow');
@@ -373,9 +380,8 @@ app.get('/admin', (req, res) => {
     const name = leads[phone]?.name || '';
     const cardId = phone.replace(/\D/g, '');
     const opts = ALL_STAGES.map(s => `<option value="${s}" ${s===stage?'selected':''}>${STAGE_CONFIG[s]?.label||s}</option>`).join('');
-    const qBtns = QUICK_REPLIES.map((q) => {
-      const escapedText = q.text.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
-      return '<button type="button" class="quick-btn" onclick="fillReply(\'' + cardId + '\', \'' + escapedText + '\')">' + q.label + '</button>';
+    const qBtns = QUICK_REPLIES.map((q, i) => {
+      return `<button type="button" class="quick-btn" data-cardid="${cardId}" data-idx="${i}">${q.label}</button>`;
     }).join('');
 
     return `<div class="card" id="card-${cardId}">
