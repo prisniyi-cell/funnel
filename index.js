@@ -829,9 +829,9 @@ app.get('/watch', (req, res) => {
 
     <div class="cta-wrap">
       <a href="https://app.expertnaire.com/product/8646634117/8478632445" class="cta-btn" target="_blank">
-        I'm ready to start printing 🦅
+        Your new era starts now 🦅
       </a>
-      <p class="cta-note">One-time payment &middot; Direct access &middot; Start today</p>
+    
     </div>
 
     <div class="divider"></div>
@@ -840,15 +840,15 @@ app.get('/watch', (req, res) => {
       <div class="proof-title">What people are saying</div>
       <div class="proof-item">
         <p>I was skeptical at first but within 48 hours of implementing what I learned I made my first dollar online. This is real.</p>
-        <div class="proof-name">-- Community member</div>
+        <div class="proof-name">-- Tunde, 28</div>
       </div>
       <div class="proof-item">
         <p>Never thought I could earn in dollars from Nigeria. This changed everything for me and my family.</p>
-        <div class="proof-name">-- Community member</div>
+        <div class="proof-name">-- Chisom, 31</div>
       </div>
       <div class="proof-item">
         <p>The system is simple and it actually works. I was doing it wrong before. Now I know exactly what to do every day.</p>
-        <div class="proof-name">-- Community member</div>
+        <div class="proof-name">-- Emeka, 24</div>
       </div>
     </div>
 
