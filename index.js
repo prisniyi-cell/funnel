@@ -412,17 +412,17 @@ app.get('/admin', (req, res) => {
 
   function pct(a, b) { return b > 0 ? Math.round((a/b)*100) + '%' : '0%'; }
 
-  html += \`<button class="quick-toggle" onclick="toggleStats()" style="margin-bottom:12px">📊 Funnel Stats</button>
-  <div id="stats-panel" style="display:none;background:#fff;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,0.07)">
-    <div style="font-size:13px;font-weight:600;color:#6b7280;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px">Drop-off Map (All time)</div>
-    <div class="funnel-row"><span>1. Total conversations</span><span class="funnel-num">\${totalConvos}</span><span class="funnel-pct">100%</span></div>
-    <div class="funnel-row"><span>2. Got intro VN</span><span class="funnel-num">\${gotVN}</span><span class="funnel-pct">\${pct(gotVN, totalConvos)}</span></div>
-    <div class="funnel-row"><span>3. Answered pain point</span><span class="funnel-num">\${answeredPainPoint}</span><span class="funnel-pct">\${pct(answeredPainPoint, totalConvos)}</span></div>
-    <div class="funnel-row"><span>4. Got VSL link</span><span class="funnel-num">\${gotVSL}</span><span class="funnel-pct">\${pct(gotVSL, totalConvos)}</span></div>
-    <div class="funnel-row"><span>5. Watched VSL (said Done)</span><span class="funnel-num">\${watchedVSL}</span><span class="funnel-pct">\${pct(watchedVSL, totalConvos)}</span></div>
-    <div class="funnel-row"><span>6. Got pitch</span><span class="funnel-num">\${gotPitch}</span><span class="funnel-pct">\${pct(gotPitch, totalConvos)}</span></div>
-    <div class="funnel-row" style="font-weight:700;color:#22c55e"><span>7. Bought</span><span class="funnel-num">\${bought}</span><span class="funnel-pct">\${pct(bought, totalConvos)}</span></div>
-  </div>\`;
+  html += '<button class="quick-toggle" onclick="toggleStats()" style="margin-bottom:12px">Funnel Stats</button>';
+  html += '<div id="stats-panel" style="display:none;background:#fff;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,0.07)">';
+  html += '<div style="font-size:13px;font-weight:600;color:#6b7280;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px">Drop-off Map (All time)</div>';
+  html += '<div class="funnel-row"><span>1. Total conversations</span><span class="funnel-num">' + totalConvos + '</span><span class="funnel-pct">100%</span></div>';
+  html += '<div class="funnel-row"><span>2. Got intro VN</span><span class="funnel-num">' + gotVN + '</span><span class="funnel-pct">' + pct(gotVN, totalConvos) + '</span></div>';
+  html += '<div class="funnel-row"><span>3. Answered pain point</span><span class="funnel-num">' + answeredPainPoint + '</span><span class="funnel-pct">' + pct(answeredPainPoint, totalConvos) + '</span></div>';
+  html += '<div class="funnel-row"><span>4. Got VSL link</span><span class="funnel-num">' + gotVSL + '</span><span class="funnel-pct">' + pct(gotVSL, totalConvos) + '</span></div>';
+  html += '<div class="funnel-row"><span>5. Watched VSL (said Done)</span><span class="funnel-num">' + watchedVSL + '</span><span class="funnel-pct">' + pct(watchedVSL, totalConvos) + '</span></div>';
+  html += '<div class="funnel-row"><span>6. Got pitch</span><span class="funnel-num">' + gotPitch + '</span><span class="funnel-pct">' + pct(gotPitch, totalConvos) + '</span></div>';
+  html += '<div class="funnel-row" style="font-weight:700;color:#22c55e"><span>7. Bought</span><span class="funnel-num">' + bought + '</span><span class="funnel-pct">' + pct(bought, totalConvos) + '</span></div>';
+  html += '</div>';
 
   function renderCard(phone) {
     const msgs = [...(conversations[phone] || [])].reverse();
