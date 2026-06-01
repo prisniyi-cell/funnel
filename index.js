@@ -252,10 +252,19 @@ app.get('/admin', (req, res) => {
   const cooledPhones = allPhones.filter(p => (leads[p]?.stage || 'done_followup') === 'done_followup');
 
   // Sort: unread first, then by last message time
+  function lastMessageIsCustomer(phone) {
+    const msgs = conversations[phone] || [];
+    if (!msgs.length) return false;
+    return msgs[msgs.length - 1].from === 'customer';
+  }
+
   const sortPhones = (phones) => phones.sort((a, b) => {
-    const au = hasUnread(a) ? 1 : 0;
-    const bu = hasUnread(b) ? 1 : 0;
+    const au = lastMessageIsCustomer(a) ? 1 : 0;
+    const bu = lastMessageIsCustomer(b) ? 1 : 0;
     if (au !== bu) return bu - au;
+    const au2 = hasUnread(a) ? 1 : 0;
+    const bu2 = hasUnread(b) ? 1 : 0;
+    if (au2 !== bu2) return bu2 - au2;
     return getLastMessageTime(b) - getLastMessageTime(a);
   });
 
@@ -319,8 +328,13 @@ app.get('/admin', (req, res) => {
       p.style.display = p.style.display === 'none' ? 'block' : 'none';
     }
     function fillReply(id, text) {
-      document.getElementById('reply-' + id).value = text;
-      document.getElementById('quick-' + id).style.display = 'none';
+      const input = document.getElementById('reply-' + id);
+      if (input) {
+        input.value = text.replace(/\\n/g, '\n');
+        input.focus();
+      }
+      const panel = document.getElementById('quick-' + id);
+      if (panel) panel.style.display = 'none';
     }
     function toggleCooled() {
       const s = document.getElementById('cooled-body');
@@ -359,7 +373,10 @@ app.get('/admin', (req, res) => {
     const name = leads[phone]?.name || '';
     const cardId = phone.replace(/\D/g, '');
     const opts = ALL_STAGES.map(s => `<option value="${s}" ${s===stage?'selected':''}>${STAGE_CONFIG[s]?.label||s}</option>`).join('');
-    const qBtns = QUICK_REPLIES.map((q,i) => `<button type="button" class="quick-btn" onclick="fillReply('${cardId}', ${JSON.stringify(q.text)})">${q.label}</button>`).join('');
+    const qBtns = QUICK_REPLIES.map((q) => {
+      const escapedText = q.text.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
+      return '<button type="button" class="quick-btn" onclick="fillReply(\'' + cardId + '\', \'' + escapedText + '\')">' + q.label + '</button>';
+    }).join('');
 
     return `<div class="card" id="card-${cardId}">
       <div class="card-top">
