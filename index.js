@@ -836,7 +836,7 @@ app.get('/watch', (req, res) => {
 
     <div class="video-wrap">
       <iframe
-        src="https://www.youtube.com/embed/aGwB50peA6g?rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0&playsinline=1"
+        src="https://www.youtube.com/embed/aGwB50peA6g?rel=0&modestbranding=1&playsinline=1"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen>
       </iframe>
