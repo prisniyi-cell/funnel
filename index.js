@@ -316,8 +316,11 @@ app.get('/admin', (req, res) => {
     .divider{border:none;border-top:1px solid #eee;margin:8px 0}
     .cooled-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:4px 0}
     .cooled-section{margin-top:4px}
+    .funnel-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f3f4f6;font-size:13px}
+    .funnel-num{font-weight:700;color:#111;min-width:30px;text-align:center}
+    .funnel-pct{color:#6b7280;min-width:40px;text-align:right}
   </style>
-  <meta http-equiv="refresh" content="30">
+  <meta http-equiv="refresh" content="300">
   <script>
     const quickReplies = ${quickReplyJS};
     function toggleManage(id) {
@@ -344,6 +347,10 @@ app.get('/admin', (req, res) => {
         }
       }
     });
+    function toggleStats() {
+      const p = document.getElementById('stats-panel');
+      p.style.display = p.style.display === 'none' ? 'block' : 'none';
+    }
     function toggleCooled() {
       const s = document.getElementById('cooled-body');
       const arrow = document.getElementById('cooled-arrow');
@@ -377,6 +384,45 @@ app.get('/admin', (req, res) => {
     <div class="stat"><div class="stat-num" style="color:#22c55e">${stageCounts['waiting_plug_reply']||0}</div><div class="stat-label">🟢 HOT</div></div>
     <div class="stat"><div class="stat-num">${allPhones.length}</div><div class="stat-label">Total</div></div>
   </div>`;
+
+  // Funnel analytics
+  const allPhonesTotal = Object.keys(conversations);
+  const totalConvos = allPhonesTotal.length;
+  const gotVN = allPhonesTotal.filter(p => {
+    const s = leads[p]?.stage;
+    return ['waiting_pain_point','waiting_permission','waiting_done','waiting_plug_reply','pitch_sent','done_followup'].includes(s);
+  }).length;
+  const answeredPainPoint = allPhonesTotal.filter(p => {
+    const s = leads[p]?.stage;
+    return ['waiting_permission','waiting_done','waiting_plug_reply','pitch_sent','done_followup'].includes(s);
+  }).length;
+  const gotVSL = allPhonesTotal.filter(p => {
+    const s = leads[p]?.stage;
+    return ['waiting_done','waiting_plug_reply','pitch_sent','done_followup'].includes(s);
+  }).length;
+  const watchedVSL = allPhonesTotal.filter(p => {
+    const s = leads[p]?.stage;
+    return ['waiting_plug_reply','pitch_sent','done_followup'].includes(s);
+  }).length;
+  const gotPitch = allPhonesTotal.filter(p => {
+    const s = leads[p]?.stage;
+    return ['pitch_sent','done_followup'].includes(s);
+  }).length;
+  const bought = allPhonesTotal.filter(p => leads[p]?.bought).length;
+
+  function pct(a, b) { return b > 0 ? Math.round((a/b)*100) + '%' : '0%'; }
+
+  html += \`<button class="quick-toggle" onclick="toggleStats()" style="margin-bottom:12px">📊 Funnel Stats</button>
+  <div id="stats-panel" style="display:none;background:#fff;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,0.07)">
+    <div style="font-size:13px;font-weight:600;color:#6b7280;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px">Drop-off Map (All time)</div>
+    <div class="funnel-row"><span>1. Total conversations</span><span class="funnel-num">\${totalConvos}</span><span class="funnel-pct">100%</span></div>
+    <div class="funnel-row"><span>2. Got intro VN</span><span class="funnel-num">\${gotVN}</span><span class="funnel-pct">\${pct(gotVN, totalConvos)}</span></div>
+    <div class="funnel-row"><span>3. Answered pain point</span><span class="funnel-num">\${answeredPainPoint}</span><span class="funnel-pct">\${pct(answeredPainPoint, totalConvos)}</span></div>
+    <div class="funnel-row"><span>4. Got VSL link</span><span class="funnel-num">\${gotVSL}</span><span class="funnel-pct">\${pct(gotVSL, totalConvos)}</span></div>
+    <div class="funnel-row"><span>5. Watched VSL (said Done)</span><span class="funnel-num">\${watchedVSL}</span><span class="funnel-pct">\${pct(watchedVSL, totalConvos)}</span></div>
+    <div class="funnel-row"><span>6. Got pitch</span><span class="funnel-num">\${gotPitch}</span><span class="funnel-pct">\${pct(gotPitch, totalConvos)}</span></div>
+    <div class="funnel-row" style="font-weight:700;color:#22c55e"><span>7. Bought</span><span class="funnel-num">\${bought}</span><span class="funnel-pct">\${pct(bought, totalConvos)}</span></div>
+  </div>\`;
 
   function renderCard(phone) {
     const msgs = [...(conversations[phone] || [])].reverse();
