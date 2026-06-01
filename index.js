@@ -158,7 +158,7 @@ const QUICK_REPLIES = [
   { label: 'MSG 3: tried before?', text: 'Okay real talk, I was just going to send this to everyone who messaged but I actually care about helping every single person actually print dollars everyday, not just sending stuff. Have you tried making money online before or is this your first time exploring it?' },
   { label: 'MSG 4: send breakdown?', text: 'I have a breakdown, the first 5 minutes alone will show you why this is different from probably everything you\'ve tried before. Would you like me to send it?' },
   { label: 'MSG 5: VSL link', text: 'Take your time with it. ' + YOUTUBE_URL + '. You reached out because you know your current situation needs a change. This breakdown is the bridge to that new era 🦅 Reply \'Done\' when you\'re finished and I\'ll help you get set up.' },
-  { label: 'MSG 6: kudos', text: 'Kudos to you 🦅. That video is the exact system of how we\'re hitting these numbers every single month. Does it look like something you would comfortably plug into your daily routine or would it be a struggle for you?' },
+  { label: 'MSG 6: kudos', text: 'Okayy okay that\'s good, kudos to you 🦅. That video is the exact system of how we are hitting these numbers every single month. Does it look like something you would comfortably plug into your daily routine or would it be a struggle for you?' },
   { label: 'MSG 8: affiliate link', text: 'Since we\'ve covered the mechanics, you can jump in here: ' + AFFILIATE_URL + '. Once you\'re in, take a look at the latest reviews from the community. See you there!' },
   { label: 'MSG 9: any questions?', text: 'Any questions before you get your big bag?' },
 ];
