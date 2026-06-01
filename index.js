@@ -835,18 +835,11 @@ app.get('/watch', (req, res) => {
     <p class="subline">Watch the full breakdown below. The part that changes everything is in the first few minutes.</p>
 
     <div class="video-wrap">
-      <div style="position:absolute;inset:0;z-index:2;pointer-events:none;"></div>
       <iframe
         src="https://www.youtube.com/embed/aGwB50peA6g?rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0&playsinline=1"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
       </iframe>
-    </div>
-
-    <div class="cta-wrap">
-      <a href="https://app.expertnaire.com/product/8646634117/8478632445" class="cta-btn" target="_blank">
-        Your new era starts now 🦅
-      </a>
-    
     </div>
 
     <div class="divider"></div>
@@ -856,8 +849,8 @@ app.get('/watch', (req, res) => {
       <div class="proof-item">
         <p>Omo I was skeptical at first but within 5 days of implementing what I learned I made my first dollar online. This is real.</p>
         <div class="proof-author">
-          <img src="https://res.cloudinary.com/dpknwoywz/image/upload/v1780321590/IMG_4130_dyxz2s.png" class="proof-avatar" alt="Tunde"/>
-          <span class="proof-name" style="margin:0;padding:0">Tunde, 28</span>
+          <img src="https://res.cloudinary.com/dpknwoywz/image/upload/v1780321590/IMG_4130_dyxz2s.png" class="proof-avatar" alt="Daniel"/>
+          <span class="proof-name" style="margin:0;padding:0">Daniel, 28</span>
         </div>
       </div>
       <div class="proof-item">
@@ -870,8 +863,8 @@ app.get('/watch', (req, res) => {
       <div class="proof-item">
         <p>The system is simple and it actually works. I was doing it wrong before, I was frustrated with all other dollar income streams I had tried. But now I know exactly what to do every day.</p>
         <div class="proof-author">
-          <img src="https://res.cloudinary.com/dpknwoywz/image/upload/v1780321585/IMG_4128_gvxosk.png" class="proof-avatar" alt="Emeka"/>
-          <span class="proof-name" style="margin:0;padding:0">Emeka, 24</span>
+          <img src="https://res.cloudinary.com/dpknwoywz/image/upload/v1780321585/IMG_4128_gvxosk.png" class="proof-avatar" alt="Gumar"/>
+          <span class="proof-name" style="margin:0;padding:0">Gumar, 24</span>
         </div>
       </div>
     </div>
