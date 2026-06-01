@@ -798,7 +798,22 @@ app.get('/watch', (req, res) => {
       text-align: center;
     }
 
-    @keyframes fadeUp {
+    .proof-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid rgba(201,168,76,0.3);
+}
+.proof-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  padding-left: 24px;
+}
+@keyframes fadeUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
@@ -810,7 +825,7 @@ app.get('/watch', (req, res) => {
 </head>
 <body>
   <div class="container">
-    <div class="badge">🦅 For serious people only</div>
+    <div class="badge">Your new era starts now 🦅</div>
 
     <h1 class="headline">
       The exact system Nigerians are using to<br/>
@@ -820,10 +835,10 @@ app.get('/watch', (req, res) => {
     <p class="subline">Watch the full breakdown below. The part that changes everything is in the first few minutes.</p>
 
     <div class="video-wrap">
+      <div style="position:absolute;inset:0;z-index:2;pointer-events:none;"></div>
       <iframe
-        src="https://www.youtube.com/embed/aGwB50peA6g?si=v9ejB0Mbd_NdzdGD&rel=0&modestbranding=1&iv_load_policy=3&color=white"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen>
+        src="https://www.youtube.com/embed/aGwB50peA6g?rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0&playsinline=1"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
       </iframe>
     </div>
 
@@ -839,16 +854,25 @@ app.get('/watch', (req, res) => {
     <div class="proof">
       <div class="proof-title">What people are saying</div>
       <div class="proof-item">
-        <p>I was skeptical at first but within 48 hours of implementing what I learned I made my first dollar online. This is real.</p>
-        <div class="proof-name">-- Tunde, 28</div>
+        <p>Omo I was skeptical at first but within 5 days of implementing what I learned I made my first dollar online. This is real.</p>
+        <div class="proof-author">
+          <img src="https://res.cloudinary.com/dpknwoywz/image/upload/v1780321590/IMG_4130_dyxz2s.png" class="proof-avatar" alt="Tunde"/>
+          <span class="proof-name" style="margin:0;padding:0">Tunde, 28</span>
+        </div>
       </div>
       <div class="proof-item">
         <p>Never thought I could earn in dollars from Nigeria. This changed everything for me and my family.</p>
-        <div class="proof-name">-- Chisom, 31</div>
+        <div class="proof-author">
+          <img src="https://res.cloudinary.com/dpknwoywz/image/upload/v1780321626/IMG_4131_w5aw6y.png" class="proof-avatar" alt="Funmi"/>
+          <span class="proof-name" style="margin:0;padding:0">Funmi, 31</span>
+        </div>
       </div>
       <div class="proof-item">
-        <p>The system is simple and it actually works. I was doing it wrong before. Now I know exactly what to do every day.</p>
-        <div class="proof-name">-- Emeka, 24</div>
+        <p>The system is simple and it actually works. I was doing it wrong before, I was frustrated with all other dollar income streams I had tried. But now I know exactly what to do every day.</p>
+        <div class="proof-author">
+          <img src="https://res.cloudinary.com/dpknwoywz/image/upload/v1780321585/IMG_4128_gvxosk.png" class="proof-avatar" alt="Emeka"/>
+          <span class="proof-name" style="margin:0;padding:0">Emeka, 24</span>
+        </div>
       </div>
     </div>
 
